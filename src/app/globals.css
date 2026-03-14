@@ -1,0 +1,304 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0a0a0a;
+  --color-fg: #e5e5e5;
+  --color-fg-muted: #8a8a8a;
+  --color-accent: #4DFFB4;
+  --color-border: #1a1a1a;
+  --color-surface: #111111;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #262626;
+}
+
+/* ── Focus indicators ── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════
+   BOOT SEQUENCE INTRO
+   ═══════════════════════════════════════════ */
+
+@keyframes bootWipe {
+  0%, 85% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.boot-overlay {
+  will-change: transform, opacity;
+  animation: bootWipe 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes bootTextFlicker {
+  0% { opacity: 0; }
+  5% { opacity: 1; }
+  10% { opacity: 0.3; }
+  15% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.boot-text {
+  animation: bootTextFlicker 1.4s steps(1) forwards;
+}
+
+/* Scanline sweep */
+@keyframes scanlineSweep {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0.3; }
+}
+
+.scanline {
+  top: -2px;
+  will-change: transform;
+  animation: scanlineSweep 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ═══════════════════════════════════════════
+   HERO NAME GLITCH (transform-only)
+   ═══════════════════════════════════════════ */
+
+.glitch-container {
+  position: relative;
+}
+
+.glitch-container::before,
+.glitch-container::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.glitch-container::before {
+  color: #ff0040;
+  animation: glitchLayer1 0.3s steps(2) 0.9s 2, glitchFadeOut 0.1s 1.5s forwards;
+}
+
+.glitch-container::after {
+  color: #0ff;
+  animation: glitchLayer2 0.3s steps(2) 0.9s 2, glitchFadeOut 0.1s 1.5s forwards;
+}
+
+@keyframes glitchLayer1 {
+  0%   { opacity: 0.7; transform: translate(-4px, -2px) scaleY(1.02); }
+  25%  { transform: translate(3px, 1px) scaleY(0.98); }
+  50%  { transform: translate(-2px, 3px) scaleY(1.01); }
+  75%  { transform: translate(4px, -1px) scaleY(0.99); }
+  100% { opacity: 0.7; transform: translate(-3px, 2px) scaleY(1.02); }
+}
+
+@keyframes glitchLayer2 {
+  0%   { opacity: 0.7; transform: translate(4px, 2px) scaleY(0.98); }
+  25%  { transform: translate(-3px, -1px) scaleY(1.01); }
+  50%  { transform: translate(2px, -3px) scaleY(0.99); }
+  75%  { transform: translate(-4px, 1px) scaleY(1.02); }
+  100% { opacity: 0.7; transform: translate(3px, -2px) scaleY(0.98); }
+}
+
+@keyframes glitchFadeOut {
+  to { opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════
+   HERO ENTRANCE ANIMATIONS
+   ═══════════════════════════════════════════ */
+
+@keyframes letterReveal {
+  from {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.hero-letter {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.hero-letter span {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: letterReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Accent line with flash */
+@keyframes lineDrawFlash {
+  0% {
+    transform: scaleX(0);
+    box-shadow: none;
+  }
+  60% {
+    transform: scaleX(1);
+    box-shadow: 0 0 20px var(--color-accent), 0 0 40px var(--color-accent);
+  }
+  100% {
+    transform: scaleX(1);
+    box-shadow: none;
+  }
+}
+
+.hero-line {
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
+  animation: lineDrawFlash 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Fade-slide up */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-fade {
+  opacity: 0;
+  transform: translateY(16px);
+  will-change: transform, opacity;
+  animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Scroll indicator */
+@keyframes growDown {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.scroll-line {
+  transform: scaleY(0);
+  transform-origin: top;
+  animation: growDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL SECTION REVEALS
+   ═══════════════════════════════════════════ */
+
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.section-reveal.visible {
+  animation: sectionReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ═══════════════════════════════════════════
+   HERO GRID BACKGROUND
+   ═══════════════════════════════════════════ */
+
+@keyframes gridFade {
+  0% { opacity: 0; }
+  40% { opacity: 0.06; }
+  100% { opacity: 0.02; }
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(var(--color-accent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-accent) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0;
+  animation: gridFade 3s ease-out 0.8s forwards;
+}
+
+/* ═══════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  .cursor-blink {
+    animation: none;
+  }
+
+  .hero-fade,
+  .hero-letter span,
+  .hero-line,
+  .scroll-line,
+  .section-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
