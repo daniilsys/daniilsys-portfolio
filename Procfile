@@ -1,1 +1,1 @@
-web: npm start -- -p $PORT
+web: npx next start -p ${PORT:-3000}
