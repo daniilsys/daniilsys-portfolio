@@ -273,32 +273,3 @@ body {
   opacity: 0;
   animation: gridFade 3s ease-out 0.8s forwards;
 }
-
-/* ═══════════════════════════════════════════
-   REDUCED MOTION
-   ═══════════════════════════════════════════ */
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-
-  html {
-    scroll-behavior: auto;
-  }
-
-  .cursor-blink {
-    animation: none;
-  }
-
-  .hero-fade,
-  .hero-letter span,
-  .hero-line,
-  .scroll-line,
-  .section-reveal {
-    opacity: 1;
-    transform: none;
-  }
-}

@@ -12,47 +12,64 @@ export type Locale = "en" | "fr";
 
 const translations = {
   en: {
-    tagline: "I build things that run fast and don't break.",
+    tagline: "I build fast software that doesn't break.",
     cta: "See my work",
     about: "About",
     aboutText:
-      "Systems & backend developer. I write Rust, ship real tools, and care about things working correctly at every layer. Joining Epitech Mulhouse in September 2026.",
-    freelance: "Open to freelance missions",
+      "Systems and backend developer. I write Rust, ship real tools, and obsess over things working correctly at every layer. Joining Epitech Mulhouse in September 2026.",
+    freelance: "Available for freelance",
     projects: "Projects",
     contact: "Contact",
-    contactMe: "Contact me",
+    contactMe: "Get in touch",
     archived: "archived",
-    // Project descriptions
     "desc.sprava":
-      "Cross-platform desktop messaging app. CI/CD multi-platform, cryptographic auto-updater.",
-    "desc.talemy": "Tutoring platform with real-time live messaging.",
+      "Cross-platform desktop messaging app with multi-platform CI/CD and a cryptographic auto-updater.",
+    "desc.talemy": "Tutoring platform with real-time messaging.",
     "desc.diself": "Async Rust library for Discord selfbot automation.",
     "desc.apple-music-rpc":
-      "macOS daemon syncing Apple Music to Discord Rich Presence via native IPC.",
+      "macOS daemon that syncs Apple Music to Discord Rich Presence via native IPC.",
     "desc.cleanapp":
-      "macOS CLI tool to remove leftover files from uninstalled apps.",
+      "macOS CLI tool that removes leftover files from uninstalled apps.",
+    "form.name": "Name",
+    "form.email": "Email",
+    "form.message": "Message",
+    "form.send": "Send",
+    "form.sending": "Sending...",
+    "form.sent": "Sent — I'll get back to you.",
+    "form.error": "Something went wrong. Try emailing me directly.",
+    "form.or": "Or reach out directly",
+    "form.copied": "Copied!",
   },
   fr: {
-    tagline: "Je construis des choses rapides et solides.",
+    tagline: "Je fais du logiciel rapide et fiable.",
     cta: "Voir mes projets",
-    about: "A propos",
+    about: "À propos",
     aboutText:
-      "Développeur systèmes & backend. J'écris du Rust, je livre de vrais outils, et je m'assure que tout fonctionne correctement à chaque couche. J'intègre Epitech Mulhouse en septembre 2026.",
+      "Développeur systèmes et backend. J'écris du Rust, je livre de vrais outils et je m'assure que tout tourne correctement à chaque couche. J'intègre Epitech Mulhouse en septembre 2026.",
     freelance: "Disponible en freelance",
     projects: "Projets",
     contact: "Contact",
     contactMe: "Me contacter",
     archived: "archivé",
     "desc.sprava":
-      "Application de messagerie desktop multi-plateforme. CI/CD multi-plateforme, auto-updater cryptographique.",
+      "Application de messagerie desktop multi-plateforme avec CI/CD et auto-updater cryptographique.",
     "desc.talemy":
       "Plateforme de tutorat avec messagerie en temps réel.",
     "desc.diself":
       "Bibliothèque Rust asynchrone pour l'automatisation de selfbots Discord.",
     "desc.apple-music-rpc":
-      "Daemon macOS synchronisant Apple Music vers Discord Rich Presence via IPC natif.",
+      "Daemon macOS qui synchronise Apple Music vers Discord Rich Presence via IPC natif.",
     "desc.cleanapp":
-      "Outil CLI macOS pour supprimer les fichiers résiduels d'applications désinstallées.",
+      "Outil CLI macOS pour supprimer les fichiers résiduels d'apps désinstallées.",
+    "form.name": "Nom",
+    "form.email": "Email",
+    "form.message": "Message",
+    "form.send": "Envoyer",
+    "form.sending": "Envoi...",
+    "form.sent": "Envoyé — je reviens vers vous.",
+    "form.error": "Une erreur est survenue. Essayez par email directement.",
+    "form.or": "Ou contactez-moi directement",
+    "form.copied": "Copié !",
   },
 } as const;
 

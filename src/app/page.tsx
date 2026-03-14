@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 
@@ -56,6 +56,7 @@ export default function Home() {
   const projectsRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
   const [bootDone, setBootDone] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setBootDone(true), BOOT_DURATION + 400);
@@ -196,12 +197,12 @@ export default function Home() {
               >
                 {t("cta")}
               </a>
-              <a
-                href="#contact"
-                className="inline-block text-xs tracking-[0.2em] uppercase text-bg bg-accent px-6 py-3 hover:bg-accent/80 transition-colors duration-150"
+              <button
+                onClick={() => setContactOpen(true)}
+                className="inline-block text-xs tracking-[0.2em] uppercase text-bg bg-accent px-6 py-3 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
               >
                 {t("contactMe")}
-              </a>
+              </button>
             </div>
           </div>
 
@@ -263,44 +264,290 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Contact ── */}
-        <section
-          id="contact"
-          className="section-reveal px-6 py-32 md:px-16 lg:px-24 border-t border-border"
-        >
-          <div className="max-w-[1200px] grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
-            <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted">
-              {t("contact")}
-            </h2>
-            <div className="flex flex-col gap-3">
-              <a
-                href="mailto:daniiliss@proton.me"
-                className="text-sm text-fg hover:text-accent transition-colors duration-150"
-              >
-                daniiliss@proton.me
-              </a>
-              <a
-                href="https://github.com/daniilsys"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-fg/60 hover:text-accent transition-colors duration-150"
-              >
-                github.com/daniilsys
-              </a>
-              <p className="text-sm text-fg/60">
-                Discord — <span className="text-fg">daniilsys</span>
-              </p>
-            </div>
-          </div>
+        {/* ── CTA before footer ── */}
+        <section className="section-reveal px-6 py-24 md:px-16 lg:px-24 border-t border-border flex flex-col items-center text-center gap-6">
+          <p className="text-sm text-fg-muted">{t("freelance")}</p>
+          <button
+            onClick={() => setContactOpen(true)}
+            className="text-xs tracking-[0.2em] uppercase text-bg bg-accent px-8 py-4 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
+          >
+            {t("contactMe")}
+          </button>
         </section>
 
         {/* ── Footer ── */}
-        <footer className="px-6 py-8 md:px-16 lg:px-24 border-t border-border">
+        <footer className="px-6 py-8 md:px-16 lg:px-24 border-t border-border flex items-center justify-between">
           <p className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/40">
             daniil &mdash; 2026
           </p>
+          <div className="flex items-center gap-6">
+            <button
+              onClick={() => setContactOpen(true)}
+              className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/40 hover:text-accent transition-colors duration-150 cursor-pointer"
+            >
+              {t("contactMe")}
+            </button>
+            <a
+              href="https://github.com/daniilsys/daniilsys-portfolio"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/40 hover:text-accent transition-colors duration-150"
+            >
+              Source
+            </a>
+          </div>
         </footer>
       </main>
+
+      {/* ── Contact Modal ── */}
+      <ContactModal
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+        t={t}
+      />
+    </div>
+  );
+}
+
+const FORMSPREE_ID = "xpqyleee";
+
+const CONTACT_LINKS = [
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
+        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    ),
+    label: "Email",
+    value: "daniiliss@proton.me",
+    href: "mailto:daniiliss@proton.me",
+    copy: "daniiliss@proton.me",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+        <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z" />
+      </svg>
+    ),
+    label: "Discord",
+    value: "daniilsys",
+    href: null,
+    copy: "daniilsys",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+        <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+      </svg>
+    ),
+    label: "GitHub",
+    value: "github.com/daniilsys",
+    href: "https://github.com/daniilsys",
+    copy: "https://github.com/daniilsys",
+  },
+];
+
+function ContactModal({
+  open,
+  onClose,
+  t,
+}: {
+  open: boolean;
+  onClose: () => void;
+  t: ReturnType<typeof useI18n>["t"];
+}) {
+  const [formStatus, setFormStatus] = useState<
+    "idle" | "sending" | "sent" | "error"
+  >("idle");
+  const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  const [closing, setClosing] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const backdropRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      setVisible(true);
+      setClosing(false);
+    }
+  }, [open]);
+
+  const handleClose = useCallback(() => {
+    setClosing(true);
+    setTimeout(() => {
+      setVisible(false);
+      setClosing(false);
+      onClose();
+    }, 250);
+  }, [onClose]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [open, handleClose]);
+
+  // Lock scroll when open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  const handleCopy = useCallback(
+    async (text: string, idx: number) => {
+      await navigator.clipboard.writeText(text);
+      setCopiedIdx(idx);
+      setTimeout(() => setCopiedIdx(null), 2000);
+    },
+    [],
+  );
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormStatus("sending");
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) {
+        setFormStatus("sent");
+        form.reset();
+      } else {
+        setFormStatus("error");
+      }
+    } catch {
+      setFormStatus("error");
+    }
+  }
+
+  if (!visible) return null;
+
+  return (
+    <div
+      ref={backdropRef}
+      className="fixed inset-0 z-[90] flex items-center justify-center p-4"
+      onClick={(e) => {
+        if (e.target === backdropRef.current) handleClose();
+      }}
+    >
+      {/* Backdrop */}
+      <div
+        onClick={handleClose}
+        className={`absolute inset-0 bg-bg/80 backdrop-blur-sm transition-opacity duration-250 ${closing ? "opacity-0" : "opacity-100"}`}
+      />
+
+      {/* Modal */}
+      <div
+        className={`relative w-full max-w-[480px] max-h-[90vh] overflow-y-auto border border-border bg-bg p-8 md:p-10 transition-all duration-250 ease-out ${closing ? "opacity-0 translate-y-4 scale-[0.97]" : "animate-[fadeSlideUp_0.3s_cubic-bezier(0.16,1,0.3,1)]"}`}
+      >
+        {/* Close button */}
+        <button
+          onClick={handleClose}
+          className="absolute top-4 right-4 text-fg-muted hover:text-fg transition-colors duration-150 cursor-pointer"
+          aria-label="Close"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+
+        {/* Title */}
+        <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted mb-8">
+          {t("contact")}
+        </h2>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="text"
+            name="name"
+            required
+            placeholder={t("form.name")}
+            className="bg-transparent border border-border px-4 py-3 text-sm text-fg placeholder:text-fg-muted/50 focus:border-accent focus:outline-none transition-colors duration-150"
+          />
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder={t("form.email")}
+            className="bg-transparent border border-border px-4 py-3 text-sm text-fg placeholder:text-fg-muted/50 focus:border-accent focus:outline-none transition-colors duration-150"
+          />
+          <textarea
+            name="message"
+            required
+            rows={4}
+            placeholder={t("form.message")}
+            className="bg-transparent border border-border px-4 py-3 text-sm text-fg placeholder:text-fg-muted/50 focus:border-accent focus:outline-none transition-colors duration-150 resize-none"
+          />
+          <div className="flex items-center gap-4">
+            <button
+              type="submit"
+              disabled={formStatus === "sending" || formStatus === "sent"}
+              className="text-xs tracking-[0.2em] uppercase text-bg bg-accent px-6 py-3 hover:bg-accent/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150 cursor-pointer"
+            >
+              {formStatus === "sending"
+                ? t("form.sending")
+                : formStatus === "sent"
+                  ? t("form.sent")
+                  : t("form.send")}
+            </button>
+            {formStatus === "error" && (
+              <span className="text-xs text-red-400">{t("form.error")}</span>
+            )}
+          </div>
+        </form>
+
+        {/* Divider + direct links */}
+        <div className="mt-10 pt-6 border-t border-border">
+          <p className="text-xs tracking-[0.15em] uppercase text-fg-muted/50 mb-5">
+            {t("form.or")}
+          </p>
+          <div className="flex items-center gap-6">
+            {CONTACT_LINKS.map((link, i) => (
+              <div key={link.label} className="relative group">
+                <button
+                  onClick={() => {
+                    if (link.href) {
+                      window.open(link.href, "_blank");
+                    }
+                    handleCopy(link.copy, i);
+                  }}
+                  className="text-fg-muted hover:text-accent transition-colors duration-150 cursor-pointer p-2"
+                  aria-label={`${link.label}: ${link.value}`}
+                >
+                  {link.icon}
+                </button>
+
+                {/* Hover tooltip — shows value */}
+                <div className="absolute bottom-full left-0 mb-2 px-3 py-1.5 bg-surface border border-border text-[10px] tracking-[0.1em] text-fg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150">
+                  {link.value}
+                </div>
+
+                {/* Copied toast */}
+                {copiedIdx === i && (
+                  <div className="absolute bottom-full left-0 mb-2 px-3 py-1.5 bg-accent text-bg text-[10px] tracking-[0.1em] font-medium whitespace-nowrap animate-[fadeSlideUp_0.2s_ease-out]">
+                    {t("form.copied")}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
