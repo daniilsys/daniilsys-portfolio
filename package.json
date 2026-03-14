@@ -12,7 +12,6 @@
   "keywords": [],
   "author": "daniilsys",
   "license": "MIT",
-  "type": "module",
   "engines": {
     "node": "20.x"
   },
