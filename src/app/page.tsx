@@ -594,7 +594,7 @@ function ContactModal({
       {/* Backdrop */}
       <div
         onClick={handleClose}
-        className={`absolute inset-0 bg-bg/80 backdrop-blur-sm transition-opacity duration-250 ${closing ? "opacity-0" : "opacity-100"}`}
+        className={`absolute inset-0 bg-bg/90 transition-opacity duration-250 ${closing ? "opacity-0" : "opacity-100"}`}
       />
 
       {/* Modal */}
