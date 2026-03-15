@@ -273,3 +273,135 @@ body {
   opacity: 0;
   animation: gridFade 3s ease-out 0.8s forwards;
 }
+
+/* ═══════════════════════════════════════════
+   FILM GRAIN OVERLAY
+   ═══════════════════════════════════════════ */
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  mix-blend-mode: overlay;
+}
+
+/* ═══════════════════════════════════════════
+   HERO CURSOR GLOW
+   ═══════════════════════════════════════════ */
+
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    600px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgba(77, 255, 180, 0.06),
+    transparent 60%
+  );
+}
+
+.hero-glow.active {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════
+   PROJECT ROW HOVER EFFECTS
+   ═══════════════════════════════════════════ */
+
+[data-project-row] {
+  position: relative;
+  padding-left: 12px;
+}
+
+/* Accent bar slides in from left on hover */
+[data-project-row]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--color-accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+a:hover [data-project-row]::before,
+[data-project-row]:hover::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+/* Subtle glow behind row on hover */
+a:hover [data-project-row],
+[data-project-row]:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(77, 255, 180, 0.03) 0%,
+    transparent 50%
+  );
+}
+
+/* ═══════════════════════════════════════════
+   CTA BUTTON GLOW
+   ═══════════════════════════════════════════ */
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(77, 255, 180, 0.2), 0 0 20px rgba(77, 255, 180, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(77, 255, 180, 0.35), 0 0 40px rgba(77, 255, 180, 0.15);
+  }
+}
+
+.cta-glow {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════
+   TEXT SCRAMBLE (heading decode on reveal)
+   ═══════════════════════════════════════════ */
+
+.scramble-text {
+  display: inline-block;
+}
+
+/* ═══════════════════════════════════════════
+   HORIZONTAL RULE GLOW
+   ═══════════════════════════════════════════ */
+
+@keyframes borderGlow {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.section-divider {
+  position: relative;
+}
+
+.section-divider::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent),
+    transparent
+  );
+  opacity: 0.15;
+}

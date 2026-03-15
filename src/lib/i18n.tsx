@@ -16,20 +16,25 @@ const translations = {
     cta: "See my work",
     about: "About",
     aboutText:
-      "Systems and backend developer. I write Rust, ship real tools, and obsess over things working correctly at every layer. Joining Epitech Mulhouse in September 2026.",
+      "Systems and backend developer. I build with Rust, ship real tools, and tackle whatever layer the problem needs — from low-level internals to production interfaces.",
     freelance: "Available for freelance",
     projects: "Projects",
     contact: "Contact",
     contactMe: "Get in touch",
     archived: "archived",
     "desc.sprava":
-      "Cross-platform desktop messaging app with multi-platform CI/CD and a cryptographic auto-updater.",
-    "desc.talemy": "Tutoring platform with real-time messaging.",
+      "Cross-platform desktop messaging app. Built a full CI/CD pipeline, native auto-updater, and real-time audio pipeline with noise suppression — from scratch to shipped.",
     "desc.diself": "Async Rust library for Discord selfbot automation.",
-    "desc.apple-music-rpc":
-      "macOS daemon that syncs Apple Music to Discord Rich Presence via native IPC.",
-    "desc.cleanapp":
+"desc.cleanapp":
       "macOS CLI tool that removes leftover files from uninstalled apps.",
+    tryDemo: "Try the demo →",
+    freelanceWork: "Freelance Work",
+    client: "client",
+    "desc.telegram-bot":
+      "Fully automated Telegram bot for a private client. Handles product delivery, license key management, and cryptocurrency payments — production-ready and actively used.",
+    "desc.pc-optim":
+      "Desktop application for a private client. Native performance monitoring and system optimization tool built with a focus on low-level efficiency.",
+    responseTime: "Response / quote within 48h",
     "form.name": "Name",
     "form.email": "Email",
     "form.message": "Message",
@@ -45,22 +50,26 @@ const translations = {
     cta: "Voir mes projets",
     about: "À propos",
     aboutText:
-      "Développeur systèmes et backend. J'écris du Rust, je livre de vrais outils et je m'assure que tout tourne correctement à chaque couche. J'intègre Epitech Mulhouse en septembre 2026.",
+      "Développeur systèmes et backend. Je travaille en Rust, je livre de vrais outils, et je construis la couche que le problème demande — du bas niveau jusqu'aux interfaces en production.",
     freelance: "Disponible en freelance",
     projects: "Projets",
     contact: "Contact",
     contactMe: "Me contacter",
     archived: "archivé",
     "desc.sprava":
-      "Application de messagerie desktop multi-plateforme avec CI/CD et auto-updater cryptographique.",
-    "desc.talemy":
-      "Plateforme de tutorat avec messagerie en temps réel.",
+      "Application de messagerie desktop cross-platform. Pipeline CI/CD complet, système de mise à jour automatique natif, et pipeline audio temps réel avec suppression de bruit — de zéro jusqu'au déploiement.",
     "desc.diself":
       "Bibliothèque Rust asynchrone pour l'automatisation de selfbots Discord.",
-    "desc.apple-music-rpc":
-      "Daemon macOS qui synchronise Apple Music vers Discord Rich Presence via IPC natif.",
-    "desc.cleanapp":
+"desc.cleanapp":
       "Outil CLI macOS pour supprimer les fichiers résiduels d'apps désinstallées.",
+    tryDemo: "Essayer la démo →",
+    freelanceWork: "Freelance",
+    client: "client",
+    "desc.telegram-bot":
+      "Bot Telegram entièrement automatisé pour un client privé. Gestion de la livraison de produits, des licences, et des paiements en cryptomonnaie — en production et activement utilisé.",
+    "desc.pc-optim":
+      "Application desktop pour un client privé. Outil natif de monitoring des performances et d'optimisation système, conçu avec un focus sur l'efficacité bas niveau.",
+    responseTime: "Réponse / devis sous 48h",
     "form.name": "Nom",
     "form.email": "Email",
     "form.message": "Message",
