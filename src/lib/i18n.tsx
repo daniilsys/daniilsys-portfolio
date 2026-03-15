@@ -25,7 +25,7 @@ const translations = {
     "desc.sprava":
       "Cross-platform desktop messaging app. Built a full CI/CD pipeline, native auto-updater, and real-time audio pipeline with noise suppression — from scratch to shipped.",
     "desc.diself": "Async Rust library for Discord selfbot automation.",
-"desc.cleanapp":
+    "desc.cleanapp":
       "macOS CLI tool that removes leftover files from uninstalled apps.",
     tryDemo: "Try the demo →",
     freelanceWork: "Freelance Work",
@@ -50,7 +50,7 @@ const translations = {
     cta: "Voir mes projets",
     about: "À propos",
     aboutText:
-      "Développeur systèmes et backend. Je travaille en Rust, je livre de vrais outils, et je construis la couche que le problème demande — du bas niveau jusqu'aux interfaces en production.",
+      "Développeur systèmes et backend. Je travaille en Rust, je livre de vrais outils, et je construis la solution que le problème demande — du bas niveau jusqu'aux interfaces en production.",
     freelance: "Disponible en freelance",
     projects: "Projets",
     contact: "Contact",
@@ -60,7 +60,7 @@ const translations = {
       "Application de messagerie desktop cross-platform. Pipeline CI/CD complet, système de mise à jour automatique natif, et pipeline audio temps réel avec suppression de bruit — de zéro jusqu'au déploiement.",
     "desc.diself":
       "Bibliothèque Rust asynchrone pour l'automatisation de selfbots Discord.",
-"desc.cleanapp":
+    "desc.cleanapp":
       "Outil CLI macOS pour supprimer les fichiers résiduels d'apps désinstallées.",
     tryDemo: "Essayer la démo →",
     freelanceWork: "Freelance",
