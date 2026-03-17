@@ -43,6 +43,15 @@ body {
   outline-offset: 2px;
 }
 
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* ═══════════════════════════════════════════
    BOOT SEQUENCE INTRO
    ═══════════════════════════════════════════ */
@@ -238,21 +247,39 @@ body {
 @keyframes sectionReveal {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(30px) scale(0.98);
+    filter: blur(4px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
   }
 }
 
 .section-reveal {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(30px) scale(0.98);
+  filter: blur(4px);
 }
 
 .section-reveal.visible {
-  animation: sectionReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: sectionReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ═══════════════════════════════════════════
+   HERO 3D PARALLAX CONTAINER
+   ═══════════════════════════════════════════ */
+
+.hero-perspective {
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+
+.hero-content-3d {
+  will-change: transform;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.15s ease-out;
 }
 
 /* ═══════════════════════════════════════════
@@ -262,7 +289,7 @@ body {
 @keyframes gridFade {
   0% { opacity: 0; }
   40% { opacity: 0.06; }
-  100% { opacity: 0.02; }
+  100% { opacity: 0.03; }
 }
 
 .hero-grid {
@@ -271,7 +298,33 @@ body {
     linear-gradient(90deg, var(--color-accent) 1px, transparent 1px);
   background-size: 60px 60px;
   opacity: 0;
+  will-change: transform;
+  transform: translate(var(--grid-x, 0px), var(--grid-y, 0px));
+  transition: transform 0.3s ease-out;
   animation: gridFade 3s ease-out 0.8s forwards;
+}
+
+/* ═══════════════════════════════════════════
+   HERO FLOATING PARTICLES
+   ═══════════════════════════════════════════ */
+
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  50% { transform: translateY(-80px) scale(1.2); }
+}
+
+.hero-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: particleFloat var(--dur, 6s) ease-in-out var(--delay, 0s) infinite;
 }
 
 /* ═══════════════════════════════════════════
@@ -290,7 +343,7 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   HERO CURSOR GLOW
+   HERO CURSOR GLOW (enhanced dual-layer)
    ═══════════════════════════════════════════ */
 
 .hero-glow {
@@ -300,11 +353,17 @@ body {
   z-index: 1;
   opacity: 0;
   transition: opacity 0.4s ease;
-  background: radial-gradient(
-    600px circle at var(--glow-x, 50%) var(--glow-y, 50%),
-    rgba(77, 255, 180, 0.06),
-    transparent 60%
-  );
+  background:
+    radial-gradient(
+      800px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+      rgba(77, 255, 180, 0.08),
+      transparent 50%
+    ),
+    radial-gradient(
+      400px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+      rgba(77, 255, 180, 0.04),
+      transparent 40%
+    );
 }
 
 .hero-glow.active {
@@ -365,7 +424,31 @@ a:hover [data-project-row],
 }
 
 .cta-glow {
+  position: relative;
   animation: glowPulse 3s ease-in-out infinite;
+  overflow: hidden;
+}
+
+/* Animated shine sweep on CTA */
+.cta-glow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  animation: shineSweep 4s ease-in-out 2s infinite;
+}
+
+@keyframes shineSweep {
+  0%, 100% { left: -100%; }
+  50% { left: 150%; }
 }
 
 /* ═══════════════════════════════════════════
@@ -403,4 +486,30 @@ a:hover [data-project-row],
     transparent
   );
   opacity: 0.15;
+}
+
+/* Animated glow dot sweeps across divider */
+.section-divider::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 40px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  filter: blur(4px);
+  opacity: 0;
+  z-index: 1;
+}
+
+.section-reveal.visible.section-divider::before {
+  animation: dividerSweep 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+@keyframes dividerSweep {
+  0% { left: 0; opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { left: 100%; opacity: 0; }
 }

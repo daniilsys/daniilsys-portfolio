@@ -44,6 +44,39 @@ function scrambleText(el: HTMLElement) {
   requestAnimationFrame(update);
 }
 
+function AnimatedNumber({ value, duration = 800 }: { value: number; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || hasAnimated.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true;
+          observer.disconnect();
+          const start = performance.now();
+          function tick(now: number) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+            el!.textContent = String(Math.round(eased * value));
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+      },
+      { threshold: 0.5 },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [value, duration]);
+
+  return <span ref={ref}>0</span>;
+}
+
 const BOOT_LINES = [
   { text: "> INIT", delay: 0 },
   { text: "> LOADING MODULES", delay: 150 },
@@ -172,25 +205,56 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  // Hero cursor glow
+  // Hero cursor glow + 3D parallax
   const heroRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const hero = heroRef.current;
     const glow = glowRef.current;
+    const content = contentRef.current;
+    const grid = gridRef.current;
     if (!hero || !glow) return;
 
     const handleMove = (e: MouseEvent) => {
       const rect = hero.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
+      const cx = x / rect.width - 0.5; // -0.5 to 0.5
+      const cy = y / rect.height - 0.5;
+
+      // Cursor glow
       glow.style.setProperty("--glow-x", `${x}px`);
       glow.style.setProperty("--glow-y", `${y}px`);
+
+      // 3D tilt on content (subtle)
+      if (content) {
+        content.style.setProperty("--rx", `${cy * -2}deg`);
+        content.style.setProperty("--ry", `${cx * 3}deg`);
+      }
+
+      // Grid parallax (moves opposite to cursor)
+      if (grid) {
+        grid.style.setProperty("--grid-x", `${cx * -15}px`);
+        grid.style.setProperty("--grid-y", `${cy * -15}px`);
+      }
     };
 
     const handleEnter = () => glow.classList.add("active");
-    const handleLeave = () => glow.classList.remove("active");
+    const handleLeave = () => {
+      glow.classList.remove("active");
+      // Reset tilt smoothly
+      if (content) {
+        content.style.setProperty("--rx", "0deg");
+        content.style.setProperty("--ry", "0deg");
+      }
+      if (grid) {
+        grid.style.setProperty("--grid-x", "0px");
+        grid.style.setProperty("--grid-y", "0px");
+      }
+    };
 
     hero.addEventListener("mousemove", handleMove);
     hero.addEventListener("mouseenter", handleEnter);
@@ -247,65 +311,92 @@ export default function Home() {
           {/* Cursor glow */}
           <div ref={glowRef} className="hero-glow" aria-hidden="true" />
 
-          {/* Animated grid background */}
+          {/* Animated grid background (parallax) */}
           <div
-            className="hero-grid absolute inset-0 pointer-events-none"
+            ref={gridRef}
+            className="hero-grid absolute inset-[-20px] pointer-events-none"
             style={{ animationDelay: `${d(HERO_START)}ms` }}
             aria-hidden="true"
           />
 
-          <div className="max-w-[1200px] relative z-10">
-            {/* Name with glitch effect */}
-            <div className="glitch-container" data-text={NAME}>
-              <h1 className="text-[clamp(3.5rem,12vw,9rem)] font-light leading-[0.85] tracking-[-0.05em] text-fg">
-                {NAME.split("").map((char, i) => (
-                  <span key={i} className="hero-letter">
-                    <span
-                      style={{
-                        animationDelay: `${d(HERO_START + i * LETTER_STAGGER)}ms`,
-                      }}
-                    >
-                      {char}
+          {/* Floating particles */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+            {[
+              { top: "20%", left: "10%", dur: "7s", delay: "0s" },
+              { top: "60%", left: "85%", dur: "9s", delay: "2s" },
+              { top: "80%", left: "30%", dur: "6s", delay: "1s" },
+              { top: "15%", left: "70%", dur: "8s", delay: "3s" },
+              { top: "45%", left: "50%", dur: "10s", delay: "4s" },
+              { top: "70%", left: "15%", dur: "7.5s", delay: "1.5s" },
+            ].map((p, i) => (
+              <div
+                key={i}
+                className="hero-particle"
+                style={{
+                  top: p.top,
+                  left: p.left,
+                  "--dur": p.dur,
+                  "--delay": p.delay,
+                } as React.CSSProperties}
+              />
+            ))}
+          </div>
+
+          {/* 3D perspective wrapper */}
+          <div className="hero-perspective max-w-[1200px] relative z-10">
+            <div ref={contentRef} className="hero-content-3d">
+              {/* Name with glitch effect */}
+              <div className="glitch-container" data-text={NAME}>
+                <h1 className="text-[clamp(3.5rem,12vw,9rem)] font-light leading-[0.85] tracking-[-0.05em] text-fg">
+                  {NAME.split("").map((char, i) => (
+                    <span key={i} className="hero-letter">
+                      <span
+                        style={{
+                          animationDelay: `${d(HERO_START + i * LETTER_STAGGER)}ms`,
+                        }}
+                      >
+                        {char}
+                      </span>
                     </span>
-                  </span>
-                ))}
-              </h1>
-            </div>
+                  ))}
+                </h1>
+              </div>
 
-            {/* Accent line with flash */}
-            <div
-              className="hero-line h-px w-full max-w-[300px] bg-accent/40 mt-6"
-              style={{ animationDelay: `${d(NAME_DONE + 100)}ms` }}
-            />
+              {/* Accent line with flash */}
+              <div
+                className="hero-line h-px w-full max-w-[300px] bg-accent/40 mt-6"
+                style={{ animationDelay: `${d(NAME_DONE + 100)}ms` }}
+              />
 
-            {/* Tagline */}
-            <div
-              className="hero-fade mt-6 flex items-center gap-3"
-              style={{ animationDelay: `${d(NAME_DONE + 250)}ms` }}
-            >
-              <span className="text-sm md:text-base text-fg-muted tracking-wide uppercase">
-                {t("tagline")}
-              </span>
-              <span className="cursor-blink text-accent text-lg">_</span>
-            </div>
-
-            {/* CTAs */}
-            <div
-              className="hero-fade mt-12 flex flex-wrap items-center gap-4"
-              style={{ animationDelay: `${d(NAME_DONE + 500)}ms` }}
-            >
-              <a
-                href="#projects"
-                className="inline-block text-xs tracking-[0.2em] uppercase text-fg-muted border border-border px-6 py-3 hover:text-accent hover:border-accent transition-colors duration-150"
+              {/* Tagline */}
+              <div
+                className="hero-fade mt-6 flex items-center gap-3"
+                style={{ animationDelay: `${d(NAME_DONE + 250)}ms` }}
               >
-                {t("cta")}
-              </a>
-              <button
-                onClick={() => setContactOpen(true)}
-                className="cta-glow inline-block text-xs tracking-[0.2em] uppercase text-bg bg-accent px-6 py-3 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
+                <span className="text-sm md:text-base text-fg-muted tracking-wide uppercase">
+                  {t("tagline")}
+                </span>
+                <span className="cursor-blink text-accent text-lg">_</span>
+              </div>
+
+              {/* CTAs */}
+              <div
+                className="hero-fade mt-12 flex flex-wrap items-center gap-4"
+                style={{ animationDelay: `${d(NAME_DONE + 500)}ms` }}
               >
-                {t("contactMe")}
-              </button>
+                <a
+                  href="#projects"
+                  className="inline-block text-xs tracking-[0.2em] uppercase text-fg-muted border border-border px-6 py-3 hover:text-accent hover:border-accent transition-colors duration-150"
+                >
+                  {t("cta")}
+                </a>
+                <button
+                  onClick={() => setContactOpen(true)}
+                  className="cta-glow inline-block text-xs tracking-[0.2em] uppercase text-bg bg-accent px-6 py-3 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
+                >
+                  {t("contactMe")}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -795,7 +886,7 @@ function ProjectRow({
                   >
                     <path d="M8 1.3l1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4L2.2 5.5l4-.6z" />
                   </svg>
-                  {gh.stars}
+                  <AnimatedNumber value={gh.stars} />
                 </span>
               )}
               {crate && (
@@ -808,7 +899,7 @@ function ProjectRow({
                     >
                       <path d="M8 1L1 5v6l7 4 7-4V5L8 1zm0 1.2L13.5 5 8 7.8 2.5 5 8 2.2zM2 5.8l5.5 3v5.4L2 11.2V5.8zm7 8.4V8.8l5-3v5.4l-5 3z" />
                     </svg>
-                    {crate.downloads}
+                    <AnimatedNumber value={crate.downloads} duration={1200} />
                   </span>
                   <span className="text-[10px] tracking-[0.1em] text-fg-muted/50">
                     v{crate.version}

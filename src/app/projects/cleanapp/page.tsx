@@ -12,23 +12,23 @@ import Link from "next/link";
 const copy = {
   en: {
     back: "Back",
-    tagline: "macOS CLI tool that removes leftover files from uninstalled apps.",
+    tagline: "Cross-platform CLI tool that finds and removes leftover files from uninstalled apps.",
     problem: "The Problem",
     problemText:
-      "When you drag a macOS app to Trash, you only delete the .app bundle. Hundreds of megabytes of caches, preferences, logs, and support files stay behind — scattered across ~/Library and /Library. Over time, these orphaned files pile up, waste disk space, and clutter your system.",
+      "When you uninstall an app, you only remove the executable. Hundreds of megabytes of caches, preferences, logs, and support files stay behind — scattered across system directories. On macOS it's ~/Library, on Linux ~/.config and ~/.cache, on Windows %APPDATA%. Over time, these orphaned files pile up, waste disk space, and clutter your system.",
     approach: "The Approach",
     approachText:
-      "cleanapp scans known macOS Library paths for anything matching the app name you provide. It shows you exactly what it found, with file sizes, and asks for confirmation before deleting anything. No guessing, no silent removals.",
+      "cleanapp scans platform-specific paths for anything matching the app name you provide. It shows you exactly what it found, with file sizes, and asks for confirmation before deleting anything. No guessing, no silent removals. Works on macOS, Linux, and Windows.",
     choices: "Technical Choices",
     choiceRust: "Rust",
     choiceRustText:
-      "Filesystem traversal needs to be fast and safe. Rust gives zero-cost abstractions over OS-level directory walking, with no runtime overhead. The resulting binary is a single native executable — no dependencies to install.",
+      "Filesystem traversal needs to be fast and safe. Rust gives zero-cost abstractions over OS-level directory walking, with no runtime overhead. The resulting binary is a single native executable — no dependencies to install. Cross-compiles to macOS, Linux, and Windows via CI.",
     choiceSafe: "Safe by default",
     choiceSafeText:
-      "Case-insensitive matching catches naming variations (e.g. \"Spotify\" vs \"com.spotify.client\"). Confirmation prompt before any deletion. --exclude flag to protect specific paths.",
+      "Case-insensitive matching catches naming variations (e.g. \"Spotify\" vs \"com.spotify.client\"). Confirmation prompt before any deletion. --exclude flag to protect specific paths. --exact flag for whole-word matching.",
     choiceDeep: "Progressive depth",
     choiceDeepText:
-      "Default mode scans ~/Library and /Library — fast and covers 95% of cases. --deep flag expands to the entire home directory for thorough cleanup when needed.",
+      "Default mode scans platform-specific directories — fast and covers 95% of cases. --deep flag expands to the entire home directory. --here flag limits to the current directory. --max-depth controls how deep the traversal goes.",
     tryIt: "Try it",
     tryItText:
       "This is a simulated terminal. Type commands below to see how cleanapp works.",
@@ -39,23 +39,23 @@ const copy = {
   fr: {
     back: "Retour",
     tagline:
-      "Outil CLI macOS pour supprimer les fichiers résiduels d'apps désinstallées.",
+      "Outil CLI cross-platform pour trouver et supprimer les fichiers résiduels d'apps désinstallées.",
     problem: "Le Problème",
     problemText:
-      "Quand vous glissez une app macOS dans la Corbeille, vous ne supprimez que le bundle .app. Des centaines de mégaoctets de caches, préférences, logs et fichiers de support restent — éparpillés dans ~/Library et /Library. Avec le temps, ces fichiers orphelins s'accumulent, gaspillent de l'espace disque et encombrent votre système.",
+      "Quand vous désinstallez une app, vous ne supprimez que l'exécutable. Des centaines de mégaoctets de caches, préférences, logs et fichiers de support restent — éparpillés dans les répertoires système. Sur macOS c'est ~/Library, sur Linux ~/.config et ~/.cache, sur Windows %APPDATA%. Avec le temps, ces fichiers orphelins s'accumulent, gaspillent de l'espace disque et encombrent votre système.",
     approach: "L'Approche",
     approachText:
-      "cleanapp scanne les chemins Library connus de macOS pour tout ce qui correspond au nom de l'app que vous fournissez. Il vous montre exactement ce qu'il a trouvé, avec les tailles de fichiers, et demande confirmation avant toute suppression. Pas de devinettes, pas de suppressions silencieuses.",
+      "cleanapp scanne les chemins spécifiques à chaque plateforme pour tout ce qui correspond au nom de l'app que vous fournissez. Il vous montre exactement ce qu'il a trouvé, avec les tailles de fichiers, et demande confirmation avant toute suppression. Pas de devinettes, pas de suppressions silencieuses. Fonctionne sur macOS, Linux et Windows.",
     choices: "Choix Techniques",
     choiceRust: "Rust",
     choiceRustText:
-      "Le parcours du système de fichiers doit être rapide et sûr. Rust offre des abstractions sans coût sur le parcours de répertoires au niveau OS, sans surcharge à l'exécution. Le binaire résultant est un seul exécutable natif — aucune dépendance à installer.",
+      "Le parcours du système de fichiers doit être rapide et sûr. Rust offre des abstractions sans coût sur le parcours de répertoires au niveau OS, sans surcharge à l'exécution. Le binaire résultant est un seul exécutable natif — aucune dépendance à installer. Cross-compilation vers macOS, Linux et Windows via CI.",
     choiceSafe: "Sûr par défaut",
     choiceSafeText:
-      "La recherche insensible à la casse capture les variations de noms (ex. \"Spotify\" vs \"com.spotify.client\"). Confirmation requise avant toute suppression. Flag --exclude pour protéger des chemins spécifiques.",
+      "La recherche insensible à la casse capture les variations de noms (ex. \"Spotify\" vs \"com.spotify.client\"). Confirmation requise avant toute suppression. Flag --exclude pour protéger des chemins spécifiques. Flag --exact pour la correspondance de mots entiers.",
     choiceDeep: "Profondeur progressive",
     choiceDeepText:
-      "Le mode par défaut scanne ~/Library et /Library — rapide et couvre 95% des cas. Le flag --deep étend la recherche au répertoire home entier pour un nettoyage complet si nécessaire.",
+      "Le mode par défaut scanne les répertoires spécifiques à la plateforme — rapide et couvre 95% des cas. Le flag --deep étend la recherche au répertoire home entier. Le flag --here limite au répertoire courant. --max-depth contrôle la profondeur du parcours.",
     tryIt: "Essayez-le",
     tryItText:
       "Ceci est un terminal simulé. Tapez des commandes ci-dessous pour voir comment cleanapp fonctionne.",
@@ -227,7 +227,7 @@ interface TermLine {
 
 function Terminal() {
   const [lines, setLines] = useState<TermLine[]>([
-    { text: "cleanapp v1.2.0 — type 'cleanapp --help' for usage", type: "info" },
+    { text: "cleanapp v0.2.0 — type 'cleanapp --help' for usage", type: "info" },
   ]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -372,12 +372,16 @@ function Terminal() {
           { text: "  --exclude <NAME>   Exclude paths containing NAME", type: "output" },
           { text: "  --exact            Match app name as complete word", type: "output" },
           { text: "  --case-sensitive   Enforce exact casing", type: "output" },
+          { text: "  --here             Search only in current directory", type: "output" },
+          { text: "  --max-depth <N>    Maximum search depth", type: "output" },
+          { text: "  --add <PATH>       Add custom search path", type: "output" },
           { text: "", type: "output" },
           { text: "EXAMPLES:", type: "info" },
           { text: "  cleanapp Spotify", type: "output" },
           { text: "  cleanapp Chrome --exclude Arc", type: "output" },
           { text: "  cleanapp Firefox --deep", type: "output" },
           { text: "  cleanapp Zoom --exact", type: "output" },
+          { text: "  cleanapp node_modules --here", type: "output" },
         );
         return;
       }
@@ -574,7 +578,7 @@ export default function CleanappCaseStudy() {
                 Rust
               </span>
               <span className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/40">
-                CLI Tool
+                CLI Tool — macOS · Linux · Windows
               </span>
             </div>
             <h1 className="text-[clamp(2.5rem,8vw,5rem)] font-light leading-[0.9] tracking-[-0.04em] text-fg mb-6">
