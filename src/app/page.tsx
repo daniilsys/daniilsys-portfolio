@@ -44,7 +44,13 @@ function scrambleText(el: HTMLElement) {
   requestAnimationFrame(update);
 }
 
-function AnimatedNumber({ value, duration = 800 }: { value: number; duration?: number }) {
+function AnimatedNumber({
+  value,
+  duration = 800,
+}: {
+  value: number;
+  duration?: number;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const hasAnimated = useRef(false);
 
@@ -86,6 +92,16 @@ const BOOT_LINES = [
 
 const projects = [
   {
+    name: "kerak",
+    descKey: "desc.kerak" as const,
+    stack: ["React Native", "Express", "Prisma", "Mistral AI"],
+    link: "/projects/kerak",
+    internal: true,
+    stars: 4,
+    featured: true,
+    github: "daniilsys/kerak",
+  },
+  {
     name: "diself",
     descKey: "desc.diself" as const,
     stack: ["Rust"],
@@ -120,7 +136,7 @@ const freelanceWork = [
   {
     name: "Telegram Auto-Shop Bot",
     descKey: "desc.telegram-bot" as const,
-    stack: ["JavaScript", "Telegram"],
+    stack: ["JavaScript", "Telegram", "CryptAPI"],
   },
   {
     name: "PC Optimization Tool",
@@ -320,7 +336,10 @@ export default function Home() {
           />
 
           {/* Floating particles */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+          <div
+            className="absolute inset-0 pointer-events-none overflow-hidden"
+            aria-hidden="true"
+          >
             {[
               { top: "20%", left: "10%", dur: "7s", delay: "0s" },
               { top: "60%", left: "85%", dur: "9s", delay: "2s" },
@@ -332,12 +351,14 @@ export default function Home() {
               <div
                 key={i}
                 className="hero-particle"
-                style={{
-                  top: p.top,
-                  left: p.left,
-                  "--dur": p.dur,
-                  "--delay": p.delay,
-                } as React.CSSProperties}
+                style={
+                  {
+                    top: p.top,
+                    left: p.left,
+                    "--dur": p.dur,
+                    "--delay": p.delay,
+                  } as React.CSSProperties
+                }
               />
             ))}
           </div>

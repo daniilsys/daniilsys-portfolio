@@ -24,6 +24,8 @@ const translations = {
     archived: "archived",
     "desc.sprava":
       "Cross-platform desktop messaging app. Built a full CI/CD pipeline, native auto-updater, and real-time audio pipeline with noise suppression - from scratch to shipped.",
+    "desc.kerak":
+      "AI-powered nutrition assistant. Calorie tracking, recipe generation, weekly meal planning - all driven by Mistral AI.",
     "desc.diself": "Async Rust library for Discord selfbot automation.",
     "desc.cleanapp":
       "Cross-platform CLI tool that finds and removes leftover files from uninstalled apps.",
@@ -58,6 +60,8 @@ const translations = {
     archived: "archivé",
     "desc.sprava":
       "Application de messagerie desktop cross-platform. Pipeline CI/CD complet, système de mise à jour automatique natif, et pipeline audio temps réel avec suppression de bruit - de zéro jusqu'au déploiement.",
+    "desc.kerak":
+      "Assistant nutrition propulsé par IA. Suivi calorique, génération de recettes, planning hebdomadaire - le tout piloté par Mistral AI.",
     "desc.diself":
       "Bibliothèque Rust asynchrone pour l'automatisation de selfbots Discord.",
     "desc.cleanapp":
