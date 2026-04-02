@@ -234,34 +234,34 @@ export default function Home() {
     const grid = gridRef.current;
     if (!hero || !glow) return;
 
+    let rafId = 0;
     const handleMove = (e: MouseEvent) => {
-      const rect = hero.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const cx = x / rect.width - 0.5; // -0.5 to 0.5
-      const cy = y / rect.height - 0.5;
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const rect = hero.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cx = x / rect.width - 0.5;
+        const cy = y / rect.height - 0.5;
 
-      // Cursor glow
-      glow.style.setProperty("--glow-x", `${x}px`);
-      glow.style.setProperty("--glow-y", `${y}px`);
+        glow.style.setProperty("--glow-x", `${x}px`);
+        glow.style.setProperty("--glow-y", `${y}px`);
 
-      // 3D tilt on content (subtle)
-      if (content) {
-        content.style.setProperty("--rx", `${cy * -2}deg`);
-        content.style.setProperty("--ry", `${cx * 3}deg`);
-      }
+        if (content) {
+          content.style.setProperty("--rx", `${cy * -2}deg`);
+          content.style.setProperty("--ry", `${cx * 3}deg`);
+        }
 
-      // Grid parallax (moves opposite to cursor)
-      if (grid) {
-        grid.style.setProperty("--grid-x", `${cx * -15}px`);
-        grid.style.setProperty("--grid-y", `${cy * -15}px`);
-      }
+        if (grid) {
+          grid.style.setProperty("--grid-x", `${cx * -15}px`);
+          grid.style.setProperty("--grid-y", `${cy * -15}px`);
+        }
+      });
     };
 
     const handleEnter = () => glow.classList.add("active");
     const handleLeave = () => {
       glow.classList.remove("active");
-      // Reset tilt smoothly
       if (content) {
         content.style.setProperty("--rx", "0deg");
         content.style.setProperty("--ry", "0deg");
@@ -272,10 +272,11 @@ export default function Home() {
       }
     };
 
-    hero.addEventListener("mousemove", handleMove);
+    hero.addEventListener("mousemove", handleMove, { passive: true });
     hero.addEventListener("mouseenter", handleEnter);
     hero.addEventListener("mouseleave", handleLeave);
     return () => {
+      cancelAnimationFrame(rafId);
       hero.removeEventListener("mousemove", handleMove);
       hero.removeEventListener("mouseenter", handleEnter);
       hero.removeEventListener("mouseleave", handleLeave);
@@ -330,7 +331,7 @@ export default function Home() {
           {/* Animated grid background (parallax) */}
           <div
             ref={gridRef}
-            className="hero-grid absolute inset-[-20px] pointer-events-none"
+            className="hero-grid absolute inset-0 pointer-events-none"
             style={{ animationDelay: `${d(HERO_START)}ms` }}
             aria-hidden="true"
           />
@@ -343,10 +344,7 @@ export default function Home() {
             {[
               { top: "20%", left: "10%", dur: "7s", delay: "0s" },
               { top: "60%", left: "85%", dur: "9s", delay: "2s" },
-              { top: "80%", left: "30%", dur: "6s", delay: "1s" },
-              { top: "15%", left: "70%", dur: "8s", delay: "3s" },
               { top: "45%", left: "50%", dur: "10s", delay: "4s" },
-              { top: "70%", left: "15%", dur: "7.5s", delay: "1.5s" },
             ].map((p, i) => (
               <div
                 key={i}

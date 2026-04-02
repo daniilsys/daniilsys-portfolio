@@ -18,6 +18,7 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 ::selection {
@@ -277,7 +278,6 @@ body {
 }
 
 .hero-content-3d {
-  will-change: transform;
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transition: transform 0.15s ease-out;
 }
@@ -298,10 +298,10 @@ body {
     linear-gradient(90deg, var(--color-accent) 1px, transparent 1px);
   background-size: 60px 60px;
   opacity: 0;
-  will-change: transform;
   transform: translate(var(--grid-x, 0px), var(--grid-y, 0px));
   transition: transform 0.3s ease-out;
   animation: gridFade 3s ease-out 0.8s forwards;
+  contain: strict;
 }
 
 /* ═══════════════════════════════════════════
@@ -323,7 +323,6 @@ body {
   background: var(--color-accent);
   pointer-events: none;
   opacity: 0;
-  will-change: transform, opacity;
   animation: particleFloat var(--dur, 6s) ease-in-out var(--delay, 0s) infinite;
 }
 
@@ -355,14 +354,9 @@ body {
   transition: opacity 0.4s ease;
   background:
     radial-gradient(
-      800px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+      600px circle at var(--glow-x, 50%) var(--glow-y, 50%),
       rgba(77, 255, 180, 0.08),
       transparent 50%
-    ),
-    radial-gradient(
-      400px circle at var(--glow-x, 50%) var(--glow-y, 50%),
-      rgba(77, 255, 180, 0.04),
-      transparent 40%
     );
 }
 
