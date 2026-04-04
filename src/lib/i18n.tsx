@@ -25,6 +25,8 @@ const translations = {
     featured: "featured",
     "desc.sprava":
       "Cross-platform desktop messaging app. Built a full CI/CD pipeline, native auto-updater, and real-time audio pipeline with noise suppression - from scratch to shipped.",
+    "desc.gitem":
+      "Local-first note-taking app with built-in spaced repetition. Markdown notes become FSRS flashcards - no cloud, no account, everything on your machine.",
     "desc.kerak":
       "AI-powered nutrition assistant. Calorie tracking, recipe generation, weekly meal planning - all driven by Mistral AI.",
     "desc.diself": "Async Rust library for Discord selfbot automation.",
@@ -62,6 +64,8 @@ const translations = {
     featured: "coup de cœur",
     "desc.sprava":
       "Application de messagerie desktop cross-platform. Pipeline CI/CD complet, système de mise à jour automatique natif, et pipeline audio temps réel avec suppression de bruit - de zéro jusqu'au déploiement.",
+    "desc.gitem":
+      "Application de prise de notes local-first avec répétition espacée intégrée. Vos notes Markdown deviennent des flashcards FSRS - sans cloud, sans compte, tout sur votre machine.",
     "desc.kerak":
       "Assistant nutrition propulsé par IA. Suivi calorique, génération de recettes, planning hebdomadaire - le tout piloté par Mistral AI.",
     "desc.diself":

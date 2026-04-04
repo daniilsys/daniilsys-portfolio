@@ -92,13 +92,21 @@ const BOOT_LINES = [
 
 const projects = [
   {
+    name: "gitem",
+    descKey: "desc.gitem" as const,
+    stack: ["Tauri", "React", "Rust", "FSRS"],
+    link: "https://gitem.daniilsys.dev",
+    stars: 4,
+    featured: true,
+    github: "daniilsys/gitem",
+  },
+  {
     name: "kerak",
     descKey: "desc.kerak" as const,
     stack: ["React Native", "Express", "Prisma", "Mistral AI"],
     link: "/projects/kerak",
     internal: true,
     stars: 4,
-    featured: true,
     github: "daniilsys/kerak",
   },
   {
