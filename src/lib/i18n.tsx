@@ -22,6 +22,7 @@ const translations = {
     contact: "Contact",
     contactMe: "Get in touch",
     archived: "archived",
+    featured: "featured",
     "desc.sprava":
       "Cross-platform desktop messaging app. Built a full CI/CD pipeline, native auto-updater, and real-time audio pipeline with noise suppression - from scratch to shipped.",
     "desc.kerak":
@@ -58,6 +59,7 @@ const translations = {
     contact: "Contact",
     contactMe: "Me contacter",
     archived: "archivé",
+    featured: "coup de cœur",
     "desc.sprava":
       "Application de messagerie desktop cross-platform. Pipeline CI/CD complet, système de mise à jour automatique natif, et pipeline audio temps réel avec suppression de bruit - de zéro jusqu'au déploiement.",
     "desc.kerak":

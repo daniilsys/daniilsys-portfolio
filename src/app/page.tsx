@@ -867,7 +867,7 @@ function ProjectRow({
             </h3>
             {"featured" in project && project.featured && (
               <span className="text-[10px] tracking-[0.1em] uppercase text-bg bg-accent px-2 py-0.5">
-                featured
+                {t("featured")}
               </span>
             )}
             {project.archived && (
