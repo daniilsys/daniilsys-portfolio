@@ -507,3 +507,246 @@ a:hover [data-project-row],
   90% { opacity: 0.6; }
   100% { left: 100%; opacity: 0; }
 }
+
+/* ═══════════════════════════════════════════
+   NAVBAR
+   ═══════════════════════════════════════════ */
+
+.navbar {
+  background: rgba(10, 10, 10, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ═══════════════════════════════════════════
+   AVAILABLE DOT
+   ═══════════════════════════════════════════ */
+
+@keyframes availablePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.available-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  animation: availablePulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   TELEGRAM TERMINAL
+   ═══════════════════════════════════════════ */
+
+.tg-terminal {
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  background: #0e1621;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.tg-chat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #17212b;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tg-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4dffb4 0%, #2b9eff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.tg-chat-area {
+  padding: 12px 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* User bubble */
+.tg-msg-user {
+  display: flex;
+  justify-content: flex-end;
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.tg-msg-user.visible {
+  animation: fadeSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--tg-delay, 0s);
+}
+
+.tg-bubble-user {
+  background: #5c5ce0;
+  color: #fff;
+  padding: 7px 12px;
+  border-radius: 12px 12px 2px 12px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tg-ts {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.45);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Bot message */
+.tg-msg-bot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.tg-msg-bot.visible {
+  animation: fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--tg-delay, 0s);
+}
+
+.tg-bubble-bot {
+  background: #182533;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 10px 13px;
+  border-radius: 2px 12px 12px 12px;
+  font-size: 11px;
+  line-height: 1.7;
+  max-width: 92%;
+}
+
+.tg-shop-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 7px;
+}
+
+.tg-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 6px 0;
+}
+
+.tg-info-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.7;
+}
+
+.tg-info-val {
+  color: #5cc8ff;
+  font-weight: 500;
+}
+
+.tg-question {
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tg-bot-footer {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.28);
+  text-align: right;
+  margin-top: 5px;
+}
+
+.tg-header-name {
+  font-size: 12px;
+  color: #fff;
+  font-weight: 600;
+  margin: 0;
+}
+
+.tg-header-sub {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.tg-header-status {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tg-online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4dffb4;
+  opacity: 0.85;
+}
+
+.tg-online-label {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.tg-cmd {
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Inline keyboard */
+.tg-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 92%;
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.tg-keyboard.visible {
+  animation: fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--tg-delay, 0s);
+}
+
+.tg-kbd-row {
+  display: flex;
+  gap: 4px;
+}
+
+.tg-kbd-btn {
+  flex: 1;
+  background: #182533;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 7px 8px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  text-align: center;
+  border-radius: 6px;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}

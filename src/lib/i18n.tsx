@@ -49,6 +49,15 @@ const translations = {
     "form.error": "Something went wrong. Try emailing me directly.",
     "form.or": "Or reach out directly",
     "form.copied": "Copied!",
+    spotlight: "Client Spotlight",
+    "telegram.clients": "active clients",
+    "telegram.uptime": "availability",
+    "telegram.auto": "automated deliveries",
+    "telegram.cta": "Have a similar project?",
+    "telegram.since": "in production · actively maintained",
+    statsProjects: "projects shipped",
+    statsStack: "stack",
+    caseStudy: "Case study →",
   },
   fr: {
     tagline: "Je fais du logiciel rapide et fiable.",
@@ -61,7 +70,7 @@ const translations = {
     contact: "Contact",
     contactMe: "Me contacter",
     archived: "archivé",
-    featured: "coup de cœur",
+    featured: "top",
     "desc.sprava":
       "Application de messagerie desktop cross-platform. Pipeline CI/CD complet, système de mise à jour automatique natif, et pipeline audio temps réel avec suppression de bruit - de zéro jusqu'au déploiement.",
     "desc.gitem":
@@ -89,6 +98,15 @@ const translations = {
     "form.error": "Une erreur est survenue. Essayez par email directement.",
     "form.or": "Ou contactez-moi directement",
     "form.copied": "Copié !",
+    spotlight: "Cas client",
+    "telegram.clients": "clients actifs",
+    "telegram.uptime": "disponibilité",
+    "telegram.auto": "livraisons automatisées",
+    "telegram.cta": "Un projet similaire ?",
+    "telegram.since": "en production · maintenu activement",
+    statsProjects: "projets livrés",
+    statsStack: "stack",
+    caseStudy: "En savoir plus →",
   },
 } as const;
 

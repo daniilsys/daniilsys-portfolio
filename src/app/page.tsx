@@ -142,16 +142,288 @@ const projects = [
 
 const freelanceWork = [
   {
-    name: "Telegram Auto-Shop Bot",
-    descKey: "desc.telegram-bot" as const,
-    stack: ["JavaScript", "Telegram", "CryptAPI"],
-  },
-  {
     name: "PC Optimization Tool",
     descKey: "desc.pc-optim" as const,
     stack: ["Rust", "Tauri", "React"],
   },
 ];
+
+function TelegramTerminal({ visible }: { visible: boolean }) {
+  const delay = (s: number) =>
+    ({ "--tg-delay": `${s}s` }) as React.CSSProperties;
+  const cls = (base: string) => `${base}${visible ? " visible" : ""}`;
+
+  return (
+    <div className="tg-terminal" aria-hidden="true">
+      <div className="tg-chat-header">
+        <div className="tg-avatar">🛒</div>
+        <div>
+          <p className="tg-header-name">AutoShop Bot</p>
+          <p className="tg-header-sub">bot</p>
+        </div>
+        <div className="tg-header-status">
+          <div className="tg-online-dot" />
+          <span className="tg-online-label">online</span>
+        </div>
+      </div>
+
+      <div className="tg-chat-area">
+        <div className={cls("tg-msg-user")} style={delay(0.1)}>
+          <div className="tg-bubble-user">
+            <span className="tg-cmd">/start</span>
+            <span className="tg-ts">
+              18:50
+              <svg viewBox="0 0 18 12" width="13" height="9" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="1,6 5,10 11,2" />
+                <polyline points="7,6 11,10 17,2" />
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <div className={cls("tg-msg-bot")} style={delay(0.55)}>
+          <div className="tg-bubble-bot">
+            <p className="tg-shop-name">🛒 AutoShop</p>
+            <div className="tg-divider" />
+            <div className="tg-info-row">💰 Votre solde :&nbsp;<span className="tg-info-val">0.00€</span></div>
+            <div className="tg-info-row">📁 Catégories :&nbsp;<span className="tg-info-val">3</span></div>
+            <div className="tg-info-row">🛍️ Produits :&nbsp;<span className="tg-info-val">12</span></div>
+            <div className="tg-divider" />
+            <p className="tg-question">⚙️ Que souhaitez-vous faire ?</p>
+            <p className="tg-bot-footer">18:50</p>
+          </div>
+        </div>
+
+        <div className={cls("tg-keyboard")} style={delay(0.95)}>
+          <div className="tg-kbd-row">
+            <div className="tg-kbd-btn">💰 Recharger le solde</div>
+            <div className="tg-kbd-btn">📁 Voir les catégories</div>
+          </div>
+          <div className="tg-kbd-row">
+            <div className="tg-kbd-btn">🛍️ Tous les produits</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TelegramShowcase({
+  t,
+  onContact,
+}: {
+  t: ReturnType<typeof useI18n>["t"];
+  onContact: () => void;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible || !ref.current) return;
+    const h2 = ref.current.querySelector("h2");
+    if (h2 && !h2.dataset.scrambled) {
+      h2.dataset.scrambled = "1";
+      scrambleText(h2);
+    }
+  }, [visible]);
+
+  return (
+    <section
+      id="telegram-bot"
+      ref={ref}
+      className={`section-divider px-6 py-32 md:px-16 lg:px-24 transition-all duration-700 ease-out ${
+        visible
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-8"
+      }`}
+    >
+      <div className="max-w-[1200px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12 lg:gap-20 items-start">
+          <div>
+            <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted mb-16">
+              {t("spotlight")}
+            </h2>
+
+            <div className="border-t border-border pt-8">
+              <div className="flex flex-wrap items-center gap-3 mb-5">
+                <h3 className="text-2xl md:text-3xl font-light tracking-[-0.02em] text-fg">
+                  Telegram Auto-Shop Bot
+                </h3>
+                <span className="text-[10px] tracking-[0.1em] uppercase text-accent/70 border border-accent/30 px-2 py-0.5">
+                  {t("client")}
+                </span>
+              </div>
+
+              <p className="font-[family-name:var(--font-body)] text-sm md:text-base text-fg-muted leading-relaxed max-w-[500px] mb-10">
+                {t("desc.telegram-bot")}
+              </p>
+
+              <div className="grid grid-cols-3 gap-6 mb-10 border-t border-border pt-8">
+                <div>
+                  <div className="text-[2rem] font-light text-accent tabular-nums leading-none">
+                    <AnimatedNumber value={50} />
+                    <span>+</span>
+                  </div>
+                  <div className="text-[10px] tracking-[0.12em] uppercase text-fg-muted mt-2">
+                    {t("telegram.clients")}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[2rem] font-light text-fg tabular-nums leading-none">24/7</div>
+                  <div className="text-[10px] tracking-[0.12em] uppercase text-fg-muted mt-2">
+                    {t("telegram.uptime")}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[2rem] font-light text-fg tabular-nums leading-none">∞</div>
+                  <div className="text-[10px] tracking-[0.12em] uppercase text-fg-muted mt-2">
+                    {t("telegram.auto")}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2 mb-10">
+                {["JavaScript", "Telegram Bot API", "CryptAPI"].map((tech) => (
+                  <span key={tech} className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/70 border border-border/60 px-2 py-1">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={onContact}
+                  className="cta-glow w-fit text-xs tracking-[0.2em] uppercase text-bg bg-accent px-6 py-3 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
+                >
+                  {t("telegram.cta")}
+                </button>
+                <p className="text-[10px] tracking-[0.12em] uppercase text-fg-muted/40">
+                  {t("telegram.since")}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden lg:block mt-16">
+            <TelegramTerminal visible={visible} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const ALL_STACKS = ["All", "Rust", "React", "TypeScript", "Mobile"] as const;
+type StackFilter = (typeof ALL_STACKS)[number];
+
+const STACK_MAP: Record<StackFilter, string[]> = {
+  All: [],
+  Rust: ["Rust"],
+  React: ["React", "Tauri"],
+  TypeScript: ["TypeScript", "Express"],
+  Mobile: ["React Native"],
+};
+
+function NavBar({
+  onContact,
+  t,
+  onVisibilityChange,
+}: {
+  onContact: () => void;
+  t: ReturnType<typeof useI18n>["t"];
+  onVisibilityChange: (v: boolean) => void;
+}) {
+  const [visible, setVisible] = useState(false);
+  const [active, setActive] = useState<string>("");
+
+  useEffect(() => {
+    const check = () => {
+      const v = window.scrollY > 80;
+      setVisible(v);
+      onVisibilityChange(v);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    return () => window.removeEventListener("scroll", check);
+  }, [onVisibilityChange]);
+
+  useEffect(() => {
+    const ids = ["telegram-bot", "projects", "about-section"];
+    const observers = ids.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActive(id); },
+        { threshold: 0.3 },
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach((o) => o?.disconnect());
+  }, []);
+
+  const navItems = [
+    { href: "#telegram-bot", label: t("spotlight") },
+    { href: "#projects", label: t("projects") },
+    { href: "#about-section", label: t("about") },
+  ];
+
+  return (
+    <nav
+      className={`navbar fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
+      }`}
+      aria-label="Site navigation"
+    >
+      <div className="flex items-center justify-between px-6 md:px-16 lg:px-24 h-12">
+        <a
+          href="#main-content"
+          className="text-[11px] tracking-[0.2em] uppercase text-fg-muted/60 hover:text-accent transition-colors duration-150"
+        >
+          daniil
+        </a>
+        <div className="flex items-center gap-6">
+          {navItems.map(({ href, label }) => {
+            const id = href.slice(1);
+            return (
+              <a
+                key={href}
+                href={href}
+                className={`text-[10px] tracking-[0.18em] uppercase transition-colors duration-150 ${
+                  active === id ? "text-accent" : "text-fg-muted/50 hover:text-fg-muted"
+                }`}
+              >
+                {label}
+              </a>
+            );
+          })}
+          <button
+            onClick={onContact}
+            className="text-[10px] tracking-[0.18em] uppercase text-bg bg-accent px-3 py-1.5 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
+          >
+            {t("contactMe")}
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+}
 
 export default function Home() {
   const { t, locale, toggle } = useI18n();
@@ -161,6 +433,8 @@ export default function Home() {
   const [skipIntro, setSkipIntro] = useState(false);
   const [bootDone, setBootDone] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [stackFilter, setStackFilter] = useState<StackFilter>("All");
+  const [navVisible, setNavVisible] = useState(false);
   const d = (ms: number) => (skipIntro ? 0 : ms);
 
   useEffect(() => {
@@ -293,10 +567,8 @@ export default function Home() {
 
   return (
     <div ref={sectionsRef}>
-      {/* ── Film grain ── */}
       <div className="grain-overlay" aria-hidden="true" />
 
-      {/* ── Boot sequence overlay ── */}
       {!bootDone && (
         <div
           className="boot-overlay fixed inset-0 z-[100] bg-bg flex flex-col justify-center px-6 md:px-16 lg:px-24"
@@ -316,7 +588,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* ── Scanline ── */}
       {!skipIntro && (
         <div
           className="scanline fixed left-0 w-full h-[2px] bg-accent/30 z-[60] pointer-events-none"
@@ -325,18 +596,17 @@ export default function Home() {
         />
       )}
 
-      <main className="min-h-screen relative">
-        <LangToggle locale={locale} toggle={toggle} skipIntro={skipIntro} />
+      <NavBar onContact={() => setContactOpen(true)} t={t} onVisibilityChange={setNavVisible} />
 
-        {/* ── Hero ── */}
+      <main id="main-content" className="min-h-screen relative">
+        <LangToggle locale={locale} toggle={toggle} skipIntro={skipIntro} hidden={navVisible} />
+
         <section
           ref={heroRef}
           className="h-screen flex flex-col justify-center md:justify-end px-6 pb-0 md:pb-16 md:px-16 lg:px-24 relative overflow-hidden"
         >
-          {/* Cursor glow */}
           <div ref={glowRef} className="hero-glow" aria-hidden="true" />
 
-          {/* Animated grid background (parallax) */}
           <div
             ref={gridRef}
             className="hero-grid absolute inset-0 pointer-events-none"
@@ -344,7 +614,6 @@ export default function Home() {
             aria-hidden="true"
           />
 
-          {/* Floating particles */}
           <div
             className="absolute inset-0 pointer-events-none overflow-hidden"
             aria-hidden="true"
@@ -369,10 +638,8 @@ export default function Home() {
             ))}
           </div>
 
-          {/* 3D perspective wrapper */}
           <div className="hero-perspective max-w-[1200px] relative z-10">
             <div ref={contentRef} className="hero-content-3d">
-              {/* Name with glitch effect */}
               <div className="glitch-container" data-text={NAME}>
                 <h1 className="text-[clamp(3.5rem,12vw,9rem)] font-light leading-[0.85] tracking-[-0.05em] text-fg">
                   {NAME.split("").map((char, i) => (
@@ -389,13 +656,11 @@ export default function Home() {
                 </h1>
               </div>
 
-              {/* Accent line with flash */}
               <div
                 className="hero-line h-px w-full max-w-[300px] bg-accent/40 mt-6"
                 style={{ animationDelay: `${d(NAME_DONE + 100)}ms` }}
               />
 
-              {/* Tagline */}
               <div
                 className="hero-fade mt-6 flex items-center gap-3"
                 style={{ animationDelay: `${d(NAME_DONE + 250)}ms` }}
@@ -404,15 +669,20 @@ export default function Home() {
                   {t("tagline")}
                 </span>
                 <span className="cursor-blink text-accent text-lg">_</span>
+                <span className="flex items-center gap-1.5 ml-2">
+                  <span className="available-dot" aria-hidden="true" />
+                  <span className="text-[10px] tracking-[0.15em] uppercase text-accent/70">
+                    {t("freelance")}
+                  </span>
+                </span>
               </div>
 
-              {/* CTAs */}
               <div
                 className="hero-fade mt-12 flex flex-wrap items-center gap-4"
                 style={{ animationDelay: `${d(NAME_DONE + 500)}ms` }}
               >
                 <a
-                  href="#projects"
+                  href="#telegram-bot"
                   className="inline-block text-xs tracking-[0.2em] uppercase text-fg-muted border border-border px-6 py-3 hover:text-accent hover:border-accent transition-colors duration-150"
                 >
                   {t("cta")}
@@ -424,10 +694,34 @@ export default function Home() {
                   {t("contactMe")}
                 </button>
               </div>
+
+              <div
+                className="hero-fade mt-10 flex flex-wrap items-center gap-x-6 gap-y-2"
+                style={{ animationDelay: `${d(NAME_DONE + 650)}ms` }}
+              >
+                {[
+                  { value: "50+", label: t("telegram.clients") },
+                  { value: "5", label: t("statsProjects") },
+                  { value: "Rust · JS · React", label: t("statsStack") },
+                ].map(({ value, label }, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <span className="text-xs font-light text-fg tabular-nums">
+                      {value}
+                    </span>
+                    <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/50">
+                      {label}
+                    </span>
+                    {i < 2 && (
+                      <span className="text-border ml-2" aria-hidden="true">
+                        /
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Scroll indicator */}
           <div className="hidden md:block absolute bottom-8 left-6 md:left-16 lg:left-24">
             <div
               className="scroll-line w-px h-16 bg-fg-muted/20"
@@ -435,7 +729,6 @@ export default function Home() {
             />
           </div>
 
-          {/* Coordinates */}
           <div
             className="hero-fade absolute top-8 left-6 md:left-16 lg:left-24 z-10 text-[10px] tracking-[0.15em] text-fg-muted/30 uppercase"
             style={{ animationDelay: `${d(NAME_DONE + 400)}ms` }}
@@ -444,14 +737,13 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── About ── */}
-        <section className="section-reveal section-divider px-6 py-32 md:px-16 lg:px-24">
+        <section id="about-section" className="section-reveal section-divider px-6 py-32 md:px-16 lg:px-24">
           <div className="max-w-[1200px] grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
             <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted">
               {t("about")}
             </h2>
             <div className="max-w-[600px]">
-              <p className="text-sm md:text-base leading-relaxed text-fg/80">
+              <p className="font-[family-name:var(--font-body)] text-sm md:text-base leading-relaxed text-fg/80">
                 {t("aboutText")}
               </p>
               <p className="mt-6 text-xs tracking-[0.15em] uppercase text-accent">
@@ -461,7 +753,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Freelance Work ── */}
+        <TelegramShowcase t={t} onContact={() => setContactOpen(true)} />
+
         <section
           className="section-reveal px-6 pt-32 pb-16 md:px-16 lg:px-24"
           ref={freelanceRef}
@@ -489,7 +782,7 @@ export default function Home() {
                       </span>
                     </div>
 
-                    <p className="text-xs md:text-sm text-fg-muted leading-relaxed">
+                    <p className="font-[family-name:var(--font-body)] text-xs md:text-sm text-fg-muted leading-relaxed">
                       {t(entry.descKey)}
                     </p>
 
@@ -510,31 +803,59 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Projects ── */}
         <section
           id="projects"
           className="px-6 pt-16 pb-32 md:px-16 lg:px-24"
           ref={projectsRef}
         >
           <div className="max-w-[1200px]">
-            <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted block mb-16">
-              {t("projects")}
-            </h2>
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-16">
+              <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted">
+                {t("projects")}
+              </h2>
+              <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by stack">
+                {ALL_STACKS.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setStackFilter(s)}
+                    className={`text-[10px] tracking-[0.12em] uppercase px-3 py-1.5 border transition-colors duration-150 cursor-pointer ${
+                      stackFilter === s
+                        ? "border-accent text-accent"
+                        : "border-border text-fg-muted/50 hover:border-fg-muted/30 hover:text-fg-muted"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             <div className="border-t border-border">
-              {projects.map((project, i) => (
-                <ProjectRow
-                  key={project.name}
-                  project={project}
-                  index={i}
-                  t={t}
-                />
-              ))}
+              {projects.map((project, i) => {
+                const matches =
+                  stackFilter === "All" ||
+                  project.stack.some((tech) =>
+                    STACK_MAP[stackFilter].some((m) =>
+                      tech.toLowerCase().includes(m.toLowerCase()),
+                    ),
+                  );
+                return (
+                  <div
+                    key={project.name}
+                    className={`transition-all duration-200 ease-out ${
+                      matches
+                        ? "opacity-100 scale-100"
+                        : "opacity-15 scale-[0.99] pointer-events-none"
+                    }`}
+                  >
+                    <ProjectRow project={project} index={i} t={t} />
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
 
-        {/* ── CTA before footer ── */}
         <section className="section-reveal px-6 py-24 md:px-16 lg:px-24 border-t border-border flex flex-col items-center text-center gap-6">
           <p className="text-sm text-fg-muted">{t("freelance")}</p>
           <button
@@ -548,7 +869,6 @@ export default function Home() {
           </p>
         </section>
 
-        {/* ── Footer ── */}
         <footer className="px-6 py-8 md:px-16 lg:px-24 border-t border-border flex items-center justify-between">
           <p className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/40">
             daniil &mdash; 2026
@@ -572,7 +892,6 @@ export default function Home() {
         </footer>
       </main>
 
-      {/* ── Contact Modal ── */}
       <ContactModal
         open={contactOpen}
         onClose={() => setContactOpen(false)}
@@ -709,17 +1028,14 @@ function ContactModal({
         if (e.target === backdropRef.current) handleClose();
       }}
     >
-      {/* Backdrop */}
       <div
         onClick={handleClose}
         className={`absolute inset-0 bg-bg/90 transition-opacity duration-250 ${closing ? "opacity-0" : "opacity-100"}`}
       />
 
-      {/* Modal */}
       <div
         className={`relative w-full max-w-[480px] max-h-[90vh] overflow-y-auto border border-border bg-bg p-8 md:p-10 transition-all duration-250 ease-out ${closing ? "opacity-0 translate-y-4 scale-[0.97]" : "animate-[fadeSlideUp_0.3s_cubic-bezier(0.16,1,0.3,1)]"}`}
       >
-        {/* Close button */}
         <button
           onClick={handleClose}
           className="absolute top-4 right-4 text-fg-muted hover:text-fg transition-colors duration-150 cursor-pointer"
@@ -736,12 +1052,10 @@ function ContactModal({
           </svg>
         </button>
 
-        {/* Title */}
         <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted mb-8">
           {t("contact")}
         </h2>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="text"
@@ -785,7 +1099,6 @@ function ContactModal({
           </div>
         </form>
 
-        {/* Divider + direct links */}
         <div className="mt-10 pt-6 border-t border-border">
           <p className="text-xs tracking-[0.15em] uppercase text-fg-muted/50 mb-5">
             {t("form.or")}
@@ -806,12 +1119,10 @@ function ContactModal({
                   {link.icon}
                 </button>
 
-                {/* Hover tooltip — shows value */}
                 <div className="absolute bottom-full left-0 mb-2 px-3 py-1.5 bg-surface border border-border text-[10px] tracking-[0.1em] text-fg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-150">
                   {link.value}
                 </div>
 
-                {/* Copied toast */}
                 {copiedIdx === i && (
                   <div className="absolute bottom-full left-0 mb-2 px-3 py-1.5 bg-accent text-bg text-[10px] tracking-[0.1em] font-medium whitespace-nowrap animate-[fadeSlideUp_0.2s_ease-out]">
                     {t("form.copied")}
@@ -830,15 +1141,17 @@ function LangToggle({
   locale,
   toggle,
   skipIntro,
+  hidden,
 }: {
   locale: Locale;
   toggle: () => void;
   skipIntro: boolean;
+  hidden?: boolean;
 }) {
   return (
     <button
       onClick={toggle}
-      className={`${skipIntro ? "" : "hero-fade "}fixed top-8 right-6 md:right-16 lg:right-24 z-40 text-xs tracking-[0.15em] uppercase border border-border px-3 py-1.5 text-fg-muted hover:text-accent hover:border-accent transition-colors duration-150 cursor-pointer`}
+      className={`${skipIntro ? "" : "hero-fade "}fixed top-8 right-6 md:right-16 lg:right-24 z-40 text-xs tracking-[0.15em] uppercase border border-border px-3 py-1.5 text-fg-muted hover:text-accent hover:border-accent transition-all duration-200 cursor-pointer ${hidden ? "opacity-0 pointer-events-none" : "opacity-100"}`}
       style={skipIntro ? undefined : { animationDelay: `${NAME_DONE + 400}ms` }}
       aria-label="Toggle language"
     >
@@ -901,7 +1214,7 @@ function ProjectRow({
               ))}
             </span>
           </div>
-          {/* Live stats */}
+
           {(gh || crate) && (
             <div className="flex items-center gap-3 mt-2">
               {gh && gh.stars > 0 && (
@@ -938,12 +1251,12 @@ function ProjectRow({
         </div>
 
         <div>
-          <p className="text-xs md:text-sm text-fg-muted leading-relaxed">
+          <p className="font-[family-name:var(--font-body)] text-xs md:text-sm text-fg-muted leading-relaxed">
             {t(project.descKey)}
           </p>
-          {project.name === "cleanapp" && (
+          {project.internal && (
             <span className="text-[10px] tracking-[0.15em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-1.5 inline-block">
-              {t("tryDemo")}
+              {t("caseStudy")}
             </span>
           )}
         </div>
