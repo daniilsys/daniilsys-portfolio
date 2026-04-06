@@ -375,37 +375,51 @@ const CST_CX = CST_W / 2;
 const CST_CY = CST_H / 2;
 
 // Colors per category
-// Systems/Backend: #4DFFB4 (accent green)
-// Web/Frontend:    #60a5fa (blue)
-// Mobile:          #a78bfa (purple)
-// Infra:           #38bdf8 (sky)
-// Database:        #e879f9 (fuchsia)
+// Systems:  #4DFFB4 (accent green)  — Rust, Tauri
+// Web:      #60a5fa (blue)          — TypeScript, React, Next.js
+// Mobile:   #a78bfa (purple)        — Expo
+// Runtime:  #4ade80 (light green)   — Node.js, Python
+// Infra:    #38bdf8 (sky)           — Docker, Nginx
+// Database: #e879f9 (fuchsia)       — PostgreSQL, SQLite, Prisma
 
 const CST_NODES = [
   { id: "rust",   label: "Rust",       color: "#4DFFB4", theta:   0, phi:  90, primary: true  },
-  { id: "tauri",  label: "Tauri",      color: "#4DFFB4", theta:  30, phi: 130, primary: false },
-  { id: "nodejs", label: "Node.js",    color: "#4DFFB4", theta: 115, phi:  78, primary: false },
-  { id: "ts",     label: "TypeScript", color: "#60a5fa", theta:  68, phi:  42, primary: false },
-  { id: "react",  label: "React",      color: "#60a5fa", theta: -58, phi:  48, primary: false },
-  { id: "nextjs", label: "Next.js",    color: "#60a5fa", theta: -28, phi: 132, primary: false },
-  { id: "expo",   label: "Expo",       color: "#a78bfa", theta:-128, phi: 112, primary: false },
-  { id: "docker", label: "Docker",     color: "#38bdf8", theta: 148, phi:  52, primary: false },
-  { id: "pg",     label: "PostgreSQL", color: "#e879f9", theta: 100, phi:  65, primary: false },
+  { id: "tauri",  label: "Tauri",      color: "#4DFFB4", theta:  22, phi: 130, primary: false },
+  { id: "ts",     label: "TypeScript", color: "#60a5fa", theta:  65, phi:  38, primary: false },
+  { id: "react",  label: "React",      color: "#60a5fa", theta: -55, phi:  45, primary: false },
+  { id: "nextjs", label: "Next.js",    color: "#60a5fa", theta: -30, phi: 128, primary: false },
+  { id: "expo",   label: "Expo",       color: "#a78bfa", theta:-115, phi:  70, primary: false },
+  { id: "nodejs", label: "Node.js",    color: "#4ade80", theta:  90, phi:  65, primary: false },
+  { id: "python", label: "Python",     color: "#4ade80", theta: 145, phi:  72, primary: false },
+  { id: "docker", label: "Docker",     color: "#38bdf8", theta: 160, phi:  48, primary: false },
+  { id: "nginx",  label: "Nginx",      color: "#38bdf8", theta: 175, phi: 108, primary: false },
+  { id: "pg",     label: "PostgreSQL", color: "#e879f9", theta: 115, phi: 118, primary: false },
+  { id: "sqlite", label: "SQLite",     color: "#e879f9", theta:  15, phi: 148, primary: false },
+  { id: "prisma", label: "Prisma",     color: "#e879f9", theta:  70, phi: 132, primary: false },
 ] as const;
 
 type NodeId = typeof CST_NODES[number]["id"];
 
 const CST_EDGES: [NodeId, NodeId][] = [
   ["rust",   "tauri"],
-  ["ts",     "react"],
-  ["ts",     "nextjs"],
-  ["ts",     "nodejs"],
+  ["rust",   "sqlite"],
+  ["tauri",  "react"],
+  ["tauri",  "ts"],
+  ["react",  "ts"],
   ["react",  "nextjs"],
   ["react",  "expo"],
-  ["tauri",  "react"],
+  ["ts",     "nextjs"],
+  ["ts",     "nodejs"],
+  ["ts",     "expo"],
+  ["nextjs", "nodejs"],
   ["nodejs", "pg"],
   ["nodejs", "docker"],
-  ["nextjs", "pg"],
+  ["python", "docker"],
+  ["python", "pg"],
+  ["pg",     "prisma"],
+  ["pg",     "docker"],
+  ["sqlite", "prisma"],
+  ["docker", "nginx"],
 ];
 
 function project3D(theta_deg: number, phi_deg: number, rotY: number) {
