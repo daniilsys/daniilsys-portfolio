@@ -343,10 +343,14 @@ const STACK_MAP: Record<StackFilter, string[]> = {
 function NavBar({
   onContact,
   t,
+  locale,
+  toggle,
   onVisibilityChange,
 }: {
   onContact: () => void;
   t: ReturnType<typeof useI18n>["t"];
+  locale: Locale;
+  toggle: () => void;
   onVisibilityChange: (v: boolean) => void;
 }) {
   const [visible, setVisible] = useState(false);
@@ -418,6 +422,13 @@ function NavBar({
             className="text-[10px] tracking-[0.18em] uppercase text-bg bg-accent px-3 py-1.5 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
           >
             {t("contactMe")}
+          </button>
+          <button
+            onClick={toggle}
+            className="text-[10px] tracking-[0.15em] uppercase border border-border px-3 py-1.5 text-fg-muted/60 hover:text-accent hover:border-accent transition-colors duration-150 cursor-pointer"
+            aria-label="Toggle language"
+          >
+            {locale === "en" ? "FR" : "EN"}
           </button>
         </div>
       </div>
@@ -596,7 +607,7 @@ export default function Home() {
         />
       )}
 
-      <NavBar onContact={() => setContactOpen(true)} t={t} onVisibilityChange={setNavVisible} />
+      <NavBar onContact={() => setContactOpen(true)} t={t} locale={locale} toggle={toggle} onVisibilityChange={setNavVisible} />
 
       <main id="main-content" className="min-h-screen relative">
         <LangToggle locale={locale} toggle={toggle} skipIntro={skipIntro} hidden={navVisible} />
@@ -1151,7 +1162,7 @@ function LangToggle({
   return (
     <button
       onClick={toggle}
-      className={`${skipIntro ? "" : "hero-fade "}fixed top-8 right-6 md:right-16 lg:right-24 z-40 text-xs tracking-[0.15em] uppercase border border-border px-3 py-1.5 text-fg-muted hover:text-accent hover:border-accent transition-all duration-200 cursor-pointer ${hidden ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+      className={`${skipIntro ? "" : "hero-fade "}fixed top-8 right-6 md:right-16 lg:right-24 z-40 text-xs tracking-[0.15em] uppercase border border-border px-3 py-1.5 text-fg-muted hover:text-accent hover:border-accent transition-colors duration-150 cursor-pointer ${hidden ? "hidden" : ""}`}
       style={skipIntro ? undefined : { animationDelay: `${NAME_DONE + 400}ms` }}
       aria-label="Toggle language"
     >
