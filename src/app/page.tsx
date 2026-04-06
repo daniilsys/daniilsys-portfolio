@@ -1061,25 +1061,18 @@ function ContactModal({
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
-            type="text"
-            name="name"
-            required
-            placeholder={t("form.name")}
-            className="bg-transparent border border-border px-4 py-3 text-sm text-fg placeholder:text-fg-muted/50 focus:border-accent focus:outline-none transition-colors duration-150"
-          />
-          <input
             type="email"
             name="email"
             required
             placeholder={t("form.email")}
-            className="bg-transparent border border-border px-4 py-3 text-sm text-fg placeholder:text-fg-muted/50 focus:border-accent focus:outline-none transition-colors duration-150"
+            className="bg-surface border border-fg-muted/20 px-4 py-3 text-sm text-fg placeholder:text-fg-muted/60 focus:border-accent focus:outline-none transition-colors duration-150"
           />
           <textarea
             name="message"
             required
             rows={4}
             placeholder={t("form.message")}
-            className="bg-transparent border border-border px-4 py-3 text-sm text-fg placeholder:text-fg-muted/50 focus:border-accent focus:outline-none transition-colors duration-150 resize-none"
+            className="bg-surface border border-fg-muted/20 px-4 py-3 text-sm text-fg placeholder:text-fg-muted/60 focus:border-accent focus:outline-none transition-colors duration-150 resize-none"
           />
           <div className="flex items-center gap-4">
             <button
