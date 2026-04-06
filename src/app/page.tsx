@@ -352,6 +352,243 @@ const STACK_MAP: Record<StackFilter, string[]> = {
   Mobile: ["React Native"],
 };
 
+/* ── Option 2: htop monitor (kept for reference) ──────────────────
+const BASE_PROCS = [
+  { pid: 1337, name: "cargo build", baseCpu: 44.2, baseMem: 312 },
+  { pid: 2048, name: "gitem",       baseCpu: 22.7, baseMem: 148 },
+  { pid: 2049, name: "kerak",       baseCpu: 11.3, baseMem: 89  },
+  { pid: 2050, name: "diself",      baseCpu: 8.1,  baseMem: 42  },
+  { pid: 2051, name: "ts-server",   baseCpu: 3.4,  baseMem: 201 },
+  { pid: 2052, name: "cleanapp",    baseCpu: 1.2,  baseMem: 28  },
+];
+────────────────────────────────────────────────────────────────── */
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function HeroMonitor(_: { skipIntro: boolean }) { return null; }
+
+// ── Option 3: Skill Constellation ─────────────────────────────────
+
+const CST_R  = 210; // sphere radius
+const CST_W  = 540;
+const CST_H  = 540;
+const CST_CX = CST_W / 2;
+const CST_CY = CST_H / 2;
+
+// Colors per category
+// Systems/Backend: #4DFFB4 (accent green)
+// Web/Frontend:    #60a5fa (blue)
+// Mobile:          #a78bfa (purple)
+// Infra:           #38bdf8 (sky)
+// Database:        #e879f9 (fuchsia)
+
+const CST_NODES = [
+  { id: "rust",   label: "Rust",       color: "#4DFFB4", theta:   0, phi:  90, primary: true  },
+  { id: "tauri",  label: "Tauri",      color: "#4DFFB4", theta:  30, phi: 130, primary: false },
+  { id: "nodejs", label: "Node.js",    color: "#4DFFB4", theta: 115, phi:  78, primary: false },
+  { id: "ts",     label: "TypeScript", color: "#60a5fa", theta:  68, phi:  42, primary: false },
+  { id: "react",  label: "React",      color: "#60a5fa", theta: -58, phi:  48, primary: false },
+  { id: "nextjs", label: "Next.js",    color: "#60a5fa", theta: -28, phi: 132, primary: false },
+  { id: "expo",   label: "Expo",       color: "#a78bfa", theta:-128, phi: 112, primary: false },
+  { id: "docker", label: "Docker",     color: "#38bdf8", theta: 148, phi:  52, primary: false },
+  { id: "pg",     label: "PostgreSQL", color: "#e879f9", theta: 100, phi:  65, primary: false },
+] as const;
+
+type NodeId = typeof CST_NODES[number]["id"];
+
+const CST_EDGES: [NodeId, NodeId][] = [
+  ["rust",   "tauri"],
+  ["ts",     "react"],
+  ["ts",     "nextjs"],
+  ["ts",     "nodejs"],
+  ["react",  "nextjs"],
+  ["react",  "expo"],
+  ["tauri",  "react"],
+  ["nodejs", "pg"],
+  ["nodejs", "docker"],
+  ["nextjs", "pg"],
+];
+
+function project3D(theta_deg: number, phi_deg: number, rotY: number) {
+  const th = (theta_deg * Math.PI) / 180;
+  const ph = (phi_deg  * Math.PI) / 180;
+  const x0 = CST_R * Math.sin(ph) * Math.cos(th);
+  const y0 = CST_R * Math.cos(ph);
+  const z0 = CST_R * Math.sin(ph) * Math.sin(th);
+  const cosR = Math.cos(rotY), sinR = Math.sin(rotY);
+  const xr =  x0 * cosR + z0 * sinR;
+  const zr = -x0 * sinR + z0 * cosR;
+  return {
+    sx: CST_CX + xr,
+    sy: CST_CY - y0,
+    depth: (zr + CST_R) / (2 * CST_R), // 0 = back, 1 = front
+  };
+}
+
+function HeroConstellation({ skipIntro }: { skipIntro: boolean }) {
+  const nodeEls  = useRef<(HTMLDivElement | null)[]>([]);
+  const lineEls  = useRef<(SVGLineElement | null)[]>([]);
+  const glowEl   = useRef<HTMLDivElement>(null);
+  const angleRef = useRef(0);
+  const hoverRef = useRef<NodeId | null>(null);
+  const rafRef   = useRef(0);
+  const entryRef = useRef(0); // 0→1 entrance progress
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(
+      () => setMounted(true),
+      skipIntro ? 50 : BOOT_DURATION + 600,
+    );
+    return () => clearTimeout(t);
+  }, [skipIntro]);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    function tick() {
+      // Entrance fade-in over ~80 frames
+      entryRef.current = Math.min(1, entryRef.current + 0.014);
+      const entry = entryRef.current;
+
+      if (!hoverRef.current) angleRef.current += 0.0035;
+      const rot = angleRef.current;
+
+      // Compute all projected positions once
+      const positions = CST_NODES.map(n => ({
+        id: n.id,
+        ...project3D(n.theta, n.phi, rot),
+      }));
+
+      // Update node DOM elements directly (no React state → no re-render)
+      CST_NODES.forEach((node, i) => {
+        const el = nodeEls.current[i];
+        if (!el) return;
+        const { sx, sy, depth } = positions[i];
+        const scale   = node.primary ? 0.78 + 0.22 * depth : 0.62 + 0.38 * depth;
+        const opacity = (node.primary ? 0.45 + 0.55 * depth : 0.12 + 0.88 * depth) * entry;
+        const isHov   = hoverRef.current === node.id;
+        const isConn  = !!hoverRef.current && CST_EDGES.some(
+          ([a, b]) => (a === hoverRef.current && b === node.id) || (b === hoverRef.current && a === node.id)
+        );
+        el.style.transform = `translate(${sx}px,${sy}px) translate(-50%,-50%) scale(${scale})`;
+        el.style.opacity   = String(opacity);
+        el.style.zIndex    = String(Math.floor(depth * 10));
+        el.style.filter    = isHov
+          ? `drop-shadow(0 0 10px ${node.color}90)`
+          : isConn
+          ? `drop-shadow(0 0 5px ${node.color}55)`
+          : "";
+      });
+
+      // Update SVG edges
+      CST_EDGES.forEach(([aId, bId], i) => {
+        const line = lineEls.current[i];
+        if (!line) return;
+        const a = positions.find(p => p.id === aId)!;
+        const b = positions.find(p => p.id === bId)!;
+        const avgDepth = (a.depth + b.depth) / 2;
+        const isActive = !!hoverRef.current && (aId === hoverRef.current || bId === hoverRef.current);
+        line.setAttribute("x1", String(a.sx));
+        line.setAttribute("y1", String(a.sy));
+        line.setAttribute("x2", String(b.sx));
+        line.setAttribute("y2", String(b.sy));
+        line.style.opacity     = String((isActive ? avgDepth * 0.85 : Math.max(0, avgDepth * 0.3 - 0.05)) * entry);
+        line.style.strokeWidth = isActive ? "1" : "0.5";
+      });
+
+      // Pulsing glow on primary node (Rust)
+      if (glowEl.current) {
+        const rustPos = positions.find(p => p.id === "rust")!;
+        glowEl.current.style.transform = `translate(${rustPos.sx}px,${rustPos.sy}px) translate(-50%,-50%)`;
+        glowEl.current.style.opacity   = String(rustPos.depth * 0.5 * entry);
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    }
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [mounted]);
+
+  return (
+    <div
+      className="relative"
+      style={{ width: CST_W, height: CST_H }}
+      aria-hidden="true"
+    >
+      {/* Ambient glow center */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 50%, rgba(77,255,180,0.04) 0%, transparent 65%)",
+        }}
+      />
+
+      {/* Rust primary node pulsing halo */}
+      <div
+        ref={glowEl}
+        className="absolute w-20 h-20 rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(77,255,180,0.18) 0%, transparent 70%)",
+          animation: "availablePulse 2.8s ease-in-out infinite",
+          opacity: 0,
+        }}
+      />
+
+      {/* SVG edges */}
+      <svg
+        className="absolute inset-0 pointer-events-none"
+        width={CST_W}
+        height={CST_H}
+        viewBox={`0 0 ${CST_W} ${CST_H}`}
+      >
+        {CST_EDGES.map((_, i) => (
+          <line
+            key={i}
+            ref={el => { lineEls.current[i] = el; }}
+            stroke="#4DFFB4"
+            strokeWidth="0.5"
+            opacity="0"
+          />
+        ))}
+      </svg>
+
+      {/* Nodes */}
+      <div className="absolute inset-0">
+        {CST_NODES.map((node, i) => (
+          <div
+            key={node.id}
+            ref={el => { nodeEls.current[i] = el; }}
+            className="absolute top-0 left-0"
+            style={{ opacity: 0, transition: "filter 0.2s ease" }}
+            onMouseEnter={() => { hoverRef.current = node.id; }}
+            onMouseLeave={() => { hoverRef.current = null; }}
+          >
+            <div
+              className={`whitespace-nowrap border tracking-[0.14em] uppercase cursor-default ${
+                node.primary
+                  ? "px-4 py-2 text-[11px]"
+                  : "px-2.5 py-1.5 text-[10px]"
+              }`}
+              style={{
+                fontFamily:      "var(--font-mono)",
+                color:           node.color,
+                borderColor:     `${node.color}30`,
+                backgroundColor: `${node.color}07`,
+              }}
+            >
+              {node.label}
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  );
+}
+
 function NavBar({
   onContact,
   t,
@@ -738,28 +975,23 @@ export default function Home() {
               </div>
 
               <div
-                className="hero-fade mt-10 flex flex-wrap items-center gap-x-6 gap-y-2"
+                className="hero-fade mt-10 flex items-center gap-2"
                 style={{ animationDelay: `${d(NAME_DONE + 650)}ms` }}
               >
-                {[
-                  { value: "50+", label: t("telegram.clients") },
-                  { value: "Rust · JS · React", label: t("statsStack") },
-                ].map(({ value, label }, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <span className="text-xs font-light text-fg tabular-nums">
-                      {value}
-                    </span>
-                    <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/50">
-                      {label}
-                    </span>
-                    {i < 2 && (
-                      <span className="text-border ml-2" aria-hidden="true">
-                        /
-                      </span>
-                    )}
-                  </div>
-                ))}
+                <span className="text-xs font-light text-accent tabular-nums">50+</span>
+                <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/50">{t("telegram.clients")}</span>
               </div>
+
+            </div>
+          </div>
+
+          {/* Constellation — absolute, centered vertically in the viewport, right side */}
+          <div
+            className="hidden lg:block absolute top-1/2 -translate-y-1/2 right-[60px] xl:right-[100px] z-10 pointer-events-none"
+            aria-hidden="true"
+          >
+            <div className="pointer-events-auto">
+              <HeroConstellation skipIntro={skipIntro} />
             </div>
           </div>
 

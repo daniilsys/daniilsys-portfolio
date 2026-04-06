@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { useI18n } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n";
 import { useGitHubStats } from "@/lib/stats";
 import Link from "next/link";
 
@@ -110,7 +109,6 @@ export default function KerakCaseStudy() {
   const { locale, toggle } = useI18n();
   const t = (key: CopyKey) => copy[locale][key];
   const sectionsRef = useRef<HTMLDivElement>(null);
-  const gh = useGitHubStats("daniilsys/kerak");
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = "auto";
@@ -193,25 +191,6 @@ export default function KerakCaseStudy() {
           <p className="text-base md:text-lg text-fg-muted leading-relaxed max-w-[600px]">
             {t("tagline")}
           </p>
-
-          {/* Live stats */}
-          {gh && (
-            <div className="flex items-center gap-6 mt-6">
-              <div className="flex items-center gap-2 text-sm text-fg-muted/60">
-                <svg
-                  viewBox="0 0 16 16"
-                  fill="currentColor"
-                  className="w-4 h-4 text-accent/60"
-                >
-                  <path d="M8 1.3l1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4L2.2 5.5l4-.6z" />
-                </svg>
-                <span className="text-fg/70">{gh.stars}</span>
-                <span className="text-[10px] tracking-[0.1em] uppercase">
-                  stars
-                </span>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* ── Two-column: sticky video + scrolling content ── */}
