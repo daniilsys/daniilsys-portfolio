@@ -6,18 +6,23 @@ Personal developer portfolio. Dark brutalist design, fast, no fluff.
 
 ## Stack
 
-- Next.js 16
+- Next.js 16 + React 19
 - Tailwind CSS 4
 - TypeScript
+- Inter + Geist Mono (Google Fonts)
 
 ## Features
 
 - Boot sequence intro with glitch effect
 - i18n (FR/EN) with browser detection
+- Persistent navbar with glassmorphism and active section tracking
+- Client spotlight section with Telegram bot terminal simulation
+- Project stack filter with fade animation
+- Hero stats bar and available-for-freelance indicator
 - Scroll-triggered animations (CSS-only, no libraries)
 - `prefers-reduced-motion` support
+- Skip link and semantic landmarks for keyboard accessibility
 - Fully responsive
-- Static export, deploy-ready
 
 ## Development
 
