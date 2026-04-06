@@ -99,6 +99,7 @@ const projects = [
     stars: 4,
     featured: true,
     github: "daniilsys/gitem",
+    caseStudy: true,
   },
   {
     name: "kerak",
@@ -1251,7 +1252,7 @@ function ProjectRow({
           <p className="font-[family-name:var(--font-body)] text-xs md:text-sm text-fg-muted leading-relaxed">
             {t(project.descKey)}
           </p>
-          {project.internal && (
+          {(project.internal || ("caseStudy" in project && project.caseStudy)) && (
             <span className="text-[10px] tracking-[0.15em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-1.5 inline-block">
               {t("caseStudy")}
             </span>
