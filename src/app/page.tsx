@@ -121,15 +121,6 @@ const projects = [
     crate: "diself",
   },
   {
-    name: "sprava",
-    descKey: "desc.sprava" as const,
-    stack: ["Rust", "Tauri", "React", "Express"],
-    link: "https://sprava.top",
-    archived: true,
-    stars: 4,
-    github: "daniilsys/sprava",
-  },
-  {
     name: "cleanapp",
     descKey: "desc.cleanapp" as const,
     stack: ["Rust"],
