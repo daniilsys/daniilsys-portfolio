@@ -418,23 +418,25 @@ function NavBar({
         >
           daniil
         </a>
-        <div className="flex items-center gap-6">
-          {navItems.map(({ href, label }) => {
-            const id = href.slice(1);
-            return (
-              <a
-                key={href}
-                href={href}
-                className={`text-[10px] tracking-[0.18em] uppercase transition-colors duration-150 ${
-                  active === id
-                    ? "text-accent"
-                    : "text-fg-muted/50 hover:text-fg-muted"
-                }`}
-              >
-                {label}
-              </a>
-            );
-          })}
+        <div className="flex items-center gap-4 md:gap-6">
+          <div className="hidden md:flex items-center gap-6">
+            {navItems.map(({ href, label }) => {
+              const id = href.slice(1);
+              return (
+                <a
+                  key={href}
+                  href={href}
+                  className={`text-[10px] tracking-[0.18em] uppercase transition-colors duration-150 ${
+                    active === id
+                      ? "text-accent"
+                      : "text-fg-muted/50 hover:text-fg-muted"
+                  }`}
+                >
+                  {label}
+                </a>
+              );
+            })}
+          </div>
           <button
             onClick={onContact}
             className="text-[10px] tracking-[0.18em] uppercase text-bg bg-accent px-3 py-1.5 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
@@ -1091,7 +1093,7 @@ function ContactModal({
       />
 
       <div
-        className={`relative w-full max-w-[480px] max-h-[90vh] overflow-y-auto border border-border bg-bg p-8 md:p-10 transition-all duration-250 ease-out ${closing ? "opacity-0 translate-y-4 scale-[0.97]" : "animate-[fadeSlideUp_0.3s_cubic-bezier(0.16,1,0.3,1)]"}`}
+        className={`relative w-full max-w-[480px] max-h-[90dvh] overflow-y-auto border border-border bg-bg p-6 md:p-10 transition-all duration-250 ease-out ${closing ? "opacity-0 translate-y-4 scale-[0.97]" : "animate-[fadeSlideUp_0.3s_cubic-bezier(0.16,1,0.3,1)]"}`}
       >
         <button
           onClick={handleClose}
@@ -1128,7 +1130,7 @@ function ContactModal({
             placeholder={t("form.message")}
             className="bg-surface border border-fg-muted/20 px-4 py-3 text-sm text-fg placeholder:text-fg-muted/60 focus:border-accent focus:outline-none transition-colors duration-150 resize-none"
           />
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3">
             <button
               type="submit"
               disabled={formStatus === "sending" || formStatus === "sent"}
@@ -1143,7 +1145,7 @@ function ContactModal({
             {formStatus === "error" && (
               <span className="text-xs text-red-400">{t("form.error")}</span>
             )}
-            <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/40 ml-auto">
+            <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/40 sm:ml-auto">
               {t("responseTime")}
             </span>
           </div>
