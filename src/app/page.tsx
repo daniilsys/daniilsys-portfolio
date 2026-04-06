@@ -352,6 +352,71 @@ const STACK_MAP: Record<StackFilter, string[]> = {
   Mobile: ["React Native"],
 };
 
+function HeroTerminal({ skipIntro }: { skipIntro: boolean }) {
+  const START = skipIntro ? 0 : BOOT_DURATION + 500;
+  const STAGGER = 85;
+
+  type Tok = { t: string; c: string };
+  const acc = (t: string): Tok => ({ t, c: "text-[#4DFFB4]" });
+  const str = (t: string): Tok => ({ t, c: "text-[#fbbf24]/75" });
+  const typ = (t: string): Tok => ({ t, c: "text-[#7dd3fc]/75" });
+  const dim = (t: string): Tok => ({ t, c: "text-fg-muted/50" });
+  const cmt = (t: string): Tok => ({ t, c: "text-fg-muted/28" });
+
+  const lines: Tok[][] = [
+    [cmt("// daniil@sys ~ build")],
+    [dim("")],
+    [acc("fn "), dim("main"), dim("() -> "), typ("Result"), dim("<()> {")],
+    [dim("    "), typ("Dev"), dim("::new()")],
+    [dim("        .name("), str('"daniil"'), dim(")")],
+    [dim("        .stack(["), str('"Rust"'), dim(", "), str('"TS"'), dim(", "), str('"React"'), dim("])")],
+    [dim("        .available("), acc("true"), dim(")")],
+    [dim("        .build()")],
+    [dim("        .run()")],
+    [dim("        ."), acc("await")],
+    [dim("}")],
+  ];
+
+  return (
+    <div className="border border-border/60 overflow-hidden" style={{ fontFamily: "var(--font-mono)" }}>
+      <div className="flex items-center gap-1.5 px-4 py-2.5 bg-surface border-b border-border/60">
+        <span className="w-2.5 h-2.5 rounded-full bg-red-500/40" />
+        <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/40" />
+        <span className="w-2.5 h-2.5 rounded-full bg-green-500/40" />
+        <span className="ml-auto text-[9px] tracking-[0.12em] uppercase text-fg-muted/25">main.rs</span>
+      </div>
+
+      <div className="px-4 pt-4 pb-3 bg-bg text-[11px] leading-[1.85]">
+        {lines.map((tokens, i) => (
+          <div
+            key={i}
+            className="flex"
+            style={{
+              opacity: 0,
+              animation: `fadeSlideUp 0.4s cubic-bezier(0.16,1,0.3,1) ${START + i * STAGGER}ms forwards`,
+            }}
+          >
+            <span className="select-none w-5 text-right mr-4 text-fg-muted/18 flex-shrink-0 tabular-nums">
+              {i + 1}
+            </span>
+            {tokens.map((tok, j) => (
+              <span key={j} className={tok.c}>{tok.t}</span>
+            ))}
+            {i === lines.length - 1 && (
+              <span className="cursor-blink text-[#4DFFB4] ml-px text-[10px]">█</span>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className="flex items-center justify-between px-4 py-1.5 bg-[#4DFFB4]/[0.04] border-t border-[#4DFFB4]/10">
+        <span className="text-[9px] tracking-[0.15em] uppercase text-[#4DFFB4]/40">rust</span>
+        <span className="text-[9px] tracking-[0.12em] text-fg-muted/25">11 lines</span>
+      </div>
+    </div>
+  );
+}
+
 function NavBar({
   onContact,
   t,
@@ -681,6 +746,7 @@ export default function Home() {
           </div>
 
           <div className="hero-perspective max-w-[1200px] relative z-10">
+            <div className="lg:grid lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px] lg:gap-12 xl:gap-20 lg:items-end">
             <div ref={contentRef} className="hero-content-3d">
               <div className="glitch-container" data-text={NAME}>
                 <h1 className="text-[clamp(3.5rem,12vw,9rem)] font-light leading-[0.85] tracking-[-0.05em] text-fg">
@@ -760,6 +826,10 @@ export default function Home() {
                   </div>
                 ))}
               </div>
+            </div>
+            <div className="hidden lg:block">
+              <HeroTerminal skipIntro={skipIntro} />
+            </div>
             </div>
           </div>
 
