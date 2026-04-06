@@ -55,7 +55,7 @@ const translations = {
     "telegram.auto": "automated deliveries",
     "telegram.cta": "Have a similar project?",
     "telegram.since": "in production · actively maintained",
-    statsProjects: "projects shipped",
+
     statsStack: "stack",
     caseStudy: "Case study →",
   },
@@ -104,7 +104,6 @@ const translations = {
     "telegram.auto": "livraisons automatisées",
     "telegram.cta": "Un projet similaire ?",
     "telegram.since": "en production · maintenu activement",
-    statsProjects: "projets livrés",
     statsStack: "stack",
     caseStudy: "En savoir plus →",
   },

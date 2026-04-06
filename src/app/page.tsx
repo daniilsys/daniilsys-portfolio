@@ -741,7 +741,6 @@ export default function Home() {
               >
                 {[
                   { value: "50+", label: t("telegram.clients") },
-                  { value: "5", label: t("statsProjects") },
                   { value: "Rust · JS · React", label: t("statsStack") },
                 ].map(({ value, label }, i) => (
                   <div key={i} className="flex items-center gap-2">
