@@ -1193,11 +1193,6 @@ function ProjectRow({
                 {t("featured")}
               </span>
             )}
-            {project.archived && (
-              <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/50 border border-border px-2 py-0.5">
-                {t("archived")}
-              </span>
-            )}
             <span
               className="flex gap-0.5"
               aria-label={`${project.stars} out of 5`}
