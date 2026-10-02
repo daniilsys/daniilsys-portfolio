@@ -546,9 +546,17 @@ a:hover [data-project-row],
 .tg-terminal {
   border: 1px solid var(--color-border);
   overflow: hidden;
-  background: #0e1621;
+  background: var(--color-surface);
   font-family: var(--font-mono);
   font-size: 12px;
+}
+
+.tg-icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  color: var(--color-accent);
+  opacity: 0.8;
 }
 
 .tg-chat-header {
@@ -556,27 +564,26 @@ a:hover [data-project-row],
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  background: #17212b;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .tg-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4dffb4 0%, #2b9eff 100%);
+  width: 28px;
+  height: 28px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 14px;
   flex-shrink: 0;
 }
 
 .tg-chat-area {
-  padding: 12px 10px 14px;
+  padding: 14px 12px 16px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 /* User bubble */
@@ -593,22 +600,20 @@ a:hover [data-project-row],
 }
 
 .tg-bubble-user {
-  background: #5c5ce0;
-  color: #fff;
-  padding: 7px 12px;
-  border-radius: 12px 12px 2px 12px;
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+  color: var(--color-accent);
+  padding: 6px 12px;
   font-size: 12px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .tg-ts {
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.45);
-  display: flex;
-  align-items: center;
-  gap: 3px;
+  color: var(--color-fg-muted);
+  opacity: 0.6;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -629,25 +634,28 @@ a:hover [data-project-row],
 }
 
 .tg-bubble-bot {
-  background: #182533;
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-fg);
   padding: 10px 13px;
-  border-radius: 2px 12px 12px 12px;
   font-size: 11px;
   line-height: 1.7;
   max-width: 92%;
 }
 
 .tg-shop-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
-  font-weight: 600;
-  color: #fff;
+  font-weight: 500;
+  color: var(--color-fg);
   margin-bottom: 7px;
 }
 
 .tg-divider {
   height: 1px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--color-border);
   margin: 6px 0;
 }
 
@@ -656,15 +664,16 @@ a:hover [data-project-row],
   align-items: center;
   gap: 4px;
   line-height: 1.7;
+  color: var(--color-fg-muted);
 }
 
 .tg-info-val {
-  color: #5cc8ff;
+  color: var(--color-accent);
   font-weight: 500;
 }
 
 .tg-question {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--color-fg-muted);
   display: flex;
   align-items: center;
   gap: 5px;
@@ -672,21 +681,23 @@ a:hover [data-project-row],
 
 .tg-bot-footer {
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.28);
+  color: var(--color-fg-muted);
+  opacity: 0.5;
   text-align: right;
   margin-top: 5px;
 }
 
 .tg-header-name {
   font-size: 12px;
-  color: #fff;
-  font-weight: 600;
+  color: var(--color-fg);
+  font-weight: 500;
   margin: 0;
 }
 
 .tg-header-sub {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--color-fg-muted);
+  opacity: 0.6;
   margin: 0;
   letter-spacing: 0.04em;
 }
@@ -699,22 +710,23 @@ a:hover [data-project-row],
 }
 
 .tg-online-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #4dffb4;
+  background: var(--color-accent);
   opacity: 0.85;
 }
 
 .tg-online-label {
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--color-fg-muted);
+  opacity: 0.6;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
 .tg-cmd {
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.05em;
 }
 
@@ -740,14 +752,16 @@ a:hover [data-project-row],
 
 .tg-kbd-btn {
   flex: 1;
-  background: #182533;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--color-border);
+  color: var(--color-fg-muted);
   padding: 7px 8px;
   font-size: 10px;
   font-family: var(--font-mono);
-  text-align: center;
-  border-radius: 6px;
+  text-transform: uppercase;
   white-space: nowrap;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.1em;
 }

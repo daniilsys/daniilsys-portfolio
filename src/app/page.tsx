@@ -140,6 +140,53 @@ const freelanceWork = [
   },
 ];
 
+const TG_ICONS = {
+  cart: (
+    <>
+      <circle cx="8" cy="21" r="1" />
+      <circle cx="19" cy="21" r="1" />
+      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+    </>
+  ),
+  wallet: (
+    <>
+      <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
+      <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
+    </>
+  ),
+  folder: (
+    <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+  ),
+  bag: (
+    <>
+      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+      <path d="M3 6h18" />
+      <path d="M16 10a4 4 0 0 1-8 0" />
+    </>
+  ),
+  sliders: (
+    <>
+      <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" />
+    </>
+  ),
+} as const;
+
+function TgIcon({ name }: { name: keyof typeof TG_ICONS }) {
+  return (
+    <svg
+      className="tg-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {TG_ICONS[name]}
+    </svg>
+  );
+}
+
 function TelegramTerminal({ visible }: { visible: boolean }) {
   const delay = (s: number) =>
     ({ "--tg-delay": `${s}s` }) as React.CSSProperties;
@@ -148,7 +195,9 @@ function TelegramTerminal({ visible }: { visible: boolean }) {
   return (
     <div className="tg-terminal" aria-hidden="true">
       <div className="tg-chat-header">
-        <div className="tg-avatar">🛒</div>
+        <div className="tg-avatar">
+          <TgIcon name="cart" />
+        </div>
         <div>
           <p className="tg-header-name">AutoShop Bot</p>
           <p className="tg-header-sub">bot</p>
@@ -163,51 +212,49 @@ function TelegramTerminal({ visible }: { visible: boolean }) {
         <div className={cls("tg-msg-user")} style={delay(0.1)}>
           <div className="tg-bubble-user">
             <span className="tg-cmd">/start</span>
-            <span className="tg-ts">
-              18:50
-              <svg
-                viewBox="0 0 18 12"
-                width="13"
-                height="9"
-                fill="none"
-                stroke="rgba(255,255,255,0.55)"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="1,6 5,10 11,2" />
-                <polyline points="7,6 11,10 17,2" />
-              </svg>
-            </span>
+            <span className="tg-ts">18:50</span>
           </div>
         </div>
 
         <div className={cls("tg-msg-bot")} style={delay(0.55)}>
           <div className="tg-bubble-bot">
-            <p className="tg-shop-name">🛒 AutoShop</p>
+            <p className="tg-shop-name">
+              <TgIcon name="cart" /> AutoShop
+            </p>
             <div className="tg-divider" />
             <div className="tg-info-row">
-              💰 Votre solde :&nbsp;<span className="tg-info-val">0.00€</span>
+              <TgIcon name="wallet" /> Votre solde :&nbsp;
+              <span className="tg-info-val">0.00€</span>
             </div>
             <div className="tg-info-row">
-              📁 Catégories :&nbsp;<span className="tg-info-val">3</span>
+              <TgIcon name="folder" /> Catégories :&nbsp;
+              <span className="tg-info-val">3</span>
             </div>
             <div className="tg-info-row">
-              🛍️ Produits :&nbsp;<span className="tg-info-val">12</span>
+              <TgIcon name="bag" /> Produits :&nbsp;
+              <span className="tg-info-val">12</span>
             </div>
             <div className="tg-divider" />
-            <p className="tg-question">⚙️ Que souhaitez-vous faire ?</p>
+            <p className="tg-question">
+              <TgIcon name="sliders" /> Que souhaitez-vous faire ?
+            </p>
             <p className="tg-bot-footer">18:50</p>
           </div>
         </div>
 
         <div className={cls("tg-keyboard")} style={delay(0.95)}>
           <div className="tg-kbd-row">
-            <div className="tg-kbd-btn">💰 Recharger le solde</div>
-            <div className="tg-kbd-btn">📁 Voir les catégories</div>
+            <div className="tg-kbd-btn">
+              <TgIcon name="wallet" /> Recharger
+            </div>
+            <div className="tg-kbd-btn">
+              <TgIcon name="folder" /> Catégories
+            </div>
           </div>
           <div className="tg-kbd-row">
-            <div className="tg-kbd-btn">🛍️ Tous les produits</div>
+            <div className="tg-kbd-btn">
+              <TgIcon name="bag" /> Tous les produits
+            </div>
           </div>
         </div>
       </div>
@@ -259,7 +306,7 @@ function TelegramShowcase({
       }`}
     >
       <div className="max-w-[1200px]">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12 lg:gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_400px] gap-12 lg:gap-20 items-start">
           <div>
             <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted mb-16">
               {t("spotlight")}
@@ -275,7 +322,7 @@ function TelegramShowcase({
                 </span>
               </div>
 
-              <p className="font-[family-name:var(--font-body)] text-sm md:text-base text-fg-muted leading-relaxed max-w-[500px] mb-10">
+              <p className="font-[family-name:var(--font-body)] text-sm md:text-base text-fg-muted leading-relaxed max-w-[560px] mb-10">
                 {t("desc.telegram-bot")}
               </p>
 
@@ -332,7 +379,7 @@ function TelegramShowcase({
             </div>
           </div>
 
-          <div className="hidden lg:block mt-16">
+          <div className="hidden lg:block mt-20">
             <TelegramTerminal visible={visible} />
           </div>
         </div>
@@ -994,6 +1041,8 @@ export default function Home() {
               >
                 <span className="text-xs font-light text-accent tabular-nums">50+</span>
                 <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/50">{t("telegram.clients")}</span>
+                <span className="text-fg-muted/20" aria-hidden="true">/</span>
+                <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/50">{t("student")}</span>
               </div>
 
             </div>
@@ -1036,6 +1085,17 @@ export default function Home() {
               <p className="font-[family-name:var(--font-body)] text-sm md:text-base leading-relaxed text-fg/80">
                 {t("aboutText")}
               </p>
+              <div className="mt-10 border-t border-border pt-4 grid grid-cols-[100px_1fr] gap-4 items-center">
+                <span className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/50">
+                  {t("education")}
+                </span>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="text-sm text-fg">{t("educationDetail")}</span>
+                  <span className="text-[10px] tracking-[0.1em] uppercase text-accent/70 border border-accent/30 px-2 py-0.5">
+                    {t("student")}
+                  </span>
+                </div>
+              </div>
               <p className="mt-6 text-xs tracking-[0.15em] uppercase text-accent">
                 {t("freelance")}
               </p>
