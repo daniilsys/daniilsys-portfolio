@@ -305,7 +305,7 @@ function TelegramShowcase({
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
     >
-      <div className="max-w-[1200px]">
+      <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_400px] gap-12 lg:gap-20 items-start">
           <div>
             <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted mb-16">
@@ -506,12 +506,14 @@ function HeroConstellation({ skipIntro }: { skipIntro: boolean }) {
   useEffect(() => {
     if (!mounted) return;
 
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     function tick() {
       // Entrance fade-in over ~80 frames
       entryRef.current = Math.min(1, entryRef.current + 0.014);
       const entry = entryRef.current;
 
-      if (!hoverRef.current) angleRef.current += 0.0035;
+      if (!hoverRef.current && !reduceMotion) angleRef.current += 0.0035;
       const rot = angleRef.current;
 
       // Compute all projected positions once
@@ -978,7 +980,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="hero-perspective max-w-[1200px] relative z-10">
+          <div className="hero-perspective w-full relative z-10 pointer-events-none">
             <div ref={contentRef} className="hero-content-3d">
               <div className="glitch-container" data-text={NAME}>
                 <h1 className="text-[clamp(3.5rem,12vw,9rem)] font-light leading-[0.85] tracking-[-0.05em] text-fg">
@@ -1018,7 +1020,7 @@ export default function Home() {
               </div>
 
               <div
-                className="hero-fade mt-12 flex flex-wrap items-center gap-4"
+                className="hero-fade mt-12 flex flex-wrap items-center gap-4 pointer-events-auto w-fit"
                 style={{ animationDelay: `${d(NAME_DONE + 500)}ms` }}
               >
                 <a
@@ -1048,15 +1050,21 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Constellation — absolute, centered vertically in the viewport, right side */}
+          {/* Constellation — background layer behind the name, scaled up per breakpoint */}
           <div
-            className="hidden lg:block absolute top-1/2 -translate-y-1/2 right-[60px] xl:right-[100px] z-10 pointer-events-none"
+            className="hidden lg:block absolute top-1/2 -translate-y-1/2 right-[calc(34vw-270px)] z-[1] pointer-events-none origin-center lg:scale-[1.1] xl:scale-[1.4] 2xl:scale-[1.75]"
             aria-hidden="true"
           >
             <div className="pointer-events-auto">
               <HeroConstellation skipIntro={skipIntro} />
             </div>
           </div>
+
+          {/* Legibility veil between the constellation and the text */}
+          <div
+            className="hidden lg:block absolute inset-y-0 left-0 w-[55%] z-[2] pointer-events-none bg-gradient-to-r from-bg/85 via-bg/40 to-transparent"
+            aria-hidden="true"
+          />
 
           <div className="hidden md:block absolute bottom-8 left-6 md:left-16 lg:left-24">
             <div
@@ -1077,7 +1085,7 @@ export default function Home() {
           id="about-section"
           className="section-reveal section-divider px-6 py-32 md:px-16 lg:px-24"
         >
-          <div className="max-w-[1200px] grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
+          <div className="w-full grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
             <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted">
               {t("about")}
             </h2>
@@ -1109,7 +1117,7 @@ export default function Home() {
           className="section-reveal px-6 pt-32 pb-16 md:px-16 lg:px-24"
           ref={freelanceRef}
         >
-          <div className="max-w-[1200px]">
+          <div className="w-full">
             <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted block mb-16">
               {t("freelanceWork")}
             </h2>
@@ -1122,7 +1130,7 @@ export default function Home() {
                   data-index={i}
                   className="group border-b border-border py-6 md:py-8 opacity-0 translate-x-[-12px] transition-none [&.animate-in]:opacity-100 [&.animate-in]:translate-x-0 [&.animate-in]:transition-all [&.animate-in]:duration-400 [&.animate-in]:ease-out"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-[220px_1fr_auto] gap-4 md:gap-8 items-start md:items-center">
+                  <div className="grid grid-cols-1 md:grid-cols-[260px_minmax(0,1fr)_minmax(0,340px)] gap-4 md:gap-8 items-start md:items-center">
                     <div className="flex items-center gap-3">
                       <h3 className="text-base md:text-lg font-normal tracking-[-0.01em] group-hover:text-accent transition-colors duration-150">
                         {entry.name}
@@ -1132,11 +1140,11 @@ export default function Home() {
                       </span>
                     </div>
 
-                    <p className="font-[family-name:var(--font-body)] text-xs md:text-sm text-fg-muted leading-relaxed">
+                    <p className="font-[family-name:var(--font-body)] text-xs md:text-sm text-fg-muted leading-relaxed max-w-[720px]">
                       {t(entry.descKey)}
                     </p>
 
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 md:justify-end">
                       {entry.stack.map((tech) => (
                         <span
                           key={tech}
@@ -1158,7 +1166,7 @@ export default function Home() {
           className="px-6 pt-16 pb-32 md:px-16 lg:px-24"
           ref={projectsRef}
         >
-          <div className="max-w-[1200px]">
+          <div className="w-full">
             <div className="flex flex-wrap items-center justify-between gap-4 mb-16">
               <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted">
                 {t("projects")}
@@ -1538,7 +1546,7 @@ function ProjectRow({
       data-index={index}
       className={`group border-b border-border py-6 md:py-8 opacity-0 translate-x-[-12px] transition-none [&.animate-in]:opacity-100 [&.animate-in]:translate-x-0 [&.animate-in]:transition-all [&.animate-in]:duration-400 [&.animate-in]:ease-out ${"featured" in project && project.featured ? "!py-8 md:!py-10" : ""}`}
     >
-      <div className="grid grid-cols-1 md:grid-cols-[220px_1fr_auto] gap-4 md:gap-8 items-start md:items-center">
+      <div className="grid grid-cols-1 md:grid-cols-[260px_minmax(0,1fr)_minmax(0,340px)] gap-4 md:gap-8 items-start md:items-center">
         <div>
           <div className="flex items-center gap-3">
             <h3 className="text-base md:text-lg font-normal tracking-[-0.01em] group-hover:text-accent transition-colors duration-150">
@@ -1604,7 +1612,7 @@ function ProjectRow({
         </div>
 
         <div>
-          <p className="font-[family-name:var(--font-body)] text-xs md:text-sm text-fg-muted leading-relaxed">
+          <p className="font-[family-name:var(--font-body)] text-xs md:text-sm text-fg-muted leading-relaxed max-w-[720px]">
             {t(project.descKey)}
           </p>
           {(project.internal ||
@@ -1615,7 +1623,7 @@ function ProjectRow({
           )}
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 md:justify-end">
           {project.stack.map((tech) => (
             <span
               key={tech}
