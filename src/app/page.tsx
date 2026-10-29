@@ -92,14 +92,13 @@ const BOOT_LINES = [
 
 const projects = [
   {
-    name: "gitem",
-    descKey: "desc.gitem" as const,
-    stack: ["Tauri", "React", "Rust", "FSRS"],
-    link: "https://gitem.daniilsys.dev",
+    name: "epiplan",
+    descKey: "desc.epiplan" as const,
+    stack: ["Python", "MCP"],
+    link: "https://github.com/daniilsys/epiplan",
     stars: 4,
     featured: true,
-    github: "daniilsys/gitem",
-    caseStudy: true,
+    github: "daniilsys/epiplan",
   },
   {
     name: "kerak",
@@ -187,7 +186,13 @@ function TgIcon({ name }: { name: keyof typeof TG_ICONS }) {
   );
 }
 
-function TelegramTerminal({ visible }: { visible: boolean }) {
+function TelegramTerminal({
+  visible,
+  t,
+}: {
+  visible: boolean;
+  t: ReturnType<typeof useI18n>["t"];
+}) {
   const delay = (s: number) =>
     ({ "--tg-delay": `${s}s` }) as React.CSSProperties;
   const cls = (base: string) => `${base}${visible ? " visible" : ""}`;
@@ -200,11 +205,11 @@ function TelegramTerminal({ visible }: { visible: boolean }) {
         </div>
         <div>
           <p className="tg-header-name">AutoShop Bot</p>
-          <p className="tg-header-sub">bot</p>
+          <p className="tg-header-sub">{t("tgDemo.bot")}</p>
         </div>
         <div className="tg-header-status">
           <div className="tg-online-dot" />
-          <span className="tg-online-label">online</span>
+          <span className="tg-online-label">{t("tgDemo.offline")}</span>
         </div>
       </div>
 
@@ -223,20 +228,20 @@ function TelegramTerminal({ visible }: { visible: boolean }) {
             </p>
             <div className="tg-divider" />
             <div className="tg-info-row">
-              <TgIcon name="wallet" /> Votre solde :&nbsp;
+              <TgIcon name="wallet" /> {t("tgDemo.balance")}&nbsp;
               <span className="tg-info-val">0.00€</span>
             </div>
             <div className="tg-info-row">
-              <TgIcon name="folder" /> Catégories :&nbsp;
+              <TgIcon name="folder" /> {t("tgDemo.categories")}&nbsp;
               <span className="tg-info-val">3</span>
             </div>
             <div className="tg-info-row">
-              <TgIcon name="bag" /> Produits :&nbsp;
+              <TgIcon name="bag" /> {t("tgDemo.products")}&nbsp;
               <span className="tg-info-val">12</span>
             </div>
             <div className="tg-divider" />
             <p className="tg-question">
-              <TgIcon name="sliders" /> Que souhaitez-vous faire ?
+              <TgIcon name="sliders" /> {t("tgDemo.question")}
             </p>
             <p className="tg-bot-footer">18:50</p>
           </div>
@@ -245,15 +250,15 @@ function TelegramTerminal({ visible }: { visible: boolean }) {
         <div className={cls("tg-keyboard")} style={delay(0.95)}>
           <div className="tg-kbd-row">
             <div className="tg-kbd-btn">
-              <TgIcon name="wallet" /> Recharger
+              <TgIcon name="wallet" /> {t("tgDemo.topup")}
             </div>
             <div className="tg-kbd-btn">
-              <TgIcon name="folder" /> Catégories
+              <TgIcon name="folder" /> {t("tgDemo.categoriesBtn")}
             </div>
           </div>
           <div className="tg-kbd-row">
             <div className="tg-kbd-btn">
-              <TgIcon name="bag" /> Tous les produits
+              <TgIcon name="bag" /> {t("tgDemo.allProducts")}
             </div>
           </div>
         </div>
@@ -320,13 +325,16 @@ function TelegramShowcase({
                 <span className="text-[10px] tracking-[0.1em] uppercase text-accent/70 border border-accent/30 px-2 py-0.5">
                   {t("client")}
                 </span>
+                <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/70 border border-border px-2 py-0.5">
+                  {t("archived")}
+                </span>
               </div>
 
               <p className="font-[family-name:var(--font-body)] text-sm md:text-base text-fg-muted leading-relaxed max-w-[560px] mb-10">
                 {t("desc.telegram-bot")}
               </p>
 
-              <div className="grid grid-cols-3 gap-6 mb-10 border-t border-border pt-8">
+              <div className="grid grid-cols-2 gap-6 mb-10 border-t border-border pt-8 max-w-[560px]">
                 <div>
                   <div className="text-[2rem] font-light text-accent tabular-nums leading-none">
                     <AnimatedNumber value={50} />
@@ -338,15 +346,7 @@ function TelegramShowcase({
                 </div>
                 <div>
                   <div className="text-[2rem] font-light text-fg tabular-nums leading-none">
-                    24/7
-                  </div>
-                  <div className="text-[10px] tracking-[0.12em] uppercase text-fg-muted mt-2">
-                    {t("telegram.uptime")}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-[2rem] font-light text-fg tabular-nums leading-none">
-                    ∞
+                    100%
                   </div>
                   <div className="text-[10px] tracking-[0.12em] uppercase text-fg-muted mt-2">
                     {t("telegram.auto")}
@@ -380,7 +380,7 @@ function TelegramShowcase({
           </div>
 
           <div className="hidden lg:block mt-20">
-            <TelegramTerminal visible={visible} />
+            <TelegramTerminal visible={visible} t={t} />
           </div>
         </div>
       </div>
@@ -388,12 +388,13 @@ function TelegramShowcase({
   );
 }
 
-const ALL_STACKS = ["All", "Rust", "React", "TypeScript", "Mobile"] as const;
+const ALL_STACKS = ["All", "Rust", "C", "React", "TypeScript", "Mobile"] as const;
 type StackFilter = (typeof ALL_STACKS)[number];
 
 const STACK_MAP: Record<StackFilter, string[]> = {
   All: [],
   Rust: ["Rust"],
+  C: ["C"],
   React: ["React", "Tauri"],
   TypeScript: ["TypeScript", "Express"],
   Mobile: ["React Native"],
@@ -402,7 +403,7 @@ const STACK_MAP: Record<StackFilter, string[]> = {
 /* ── Option 2: htop monitor (kept for reference) ──────────────────
 const BASE_PROCS = [
   { pid: 1337, name: "cargo build", baseCpu: 44.2, baseMem: 312 },
-  { pid: 2048, name: "gitem",       baseCpu: 22.7, baseMem: 148 },
+  { pid: 2048, name: "epiplan",     baseCpu: 22.7, baseMem: 148 },
   { pid: 2049, name: "kerak",       baseCpu: 11.3, baseMem: 89  },
   { pid: 2050, name: "diself",      baseCpu: 8.1,  baseMem: 42  },
   { pid: 2051, name: "ts-server",   baseCpu: 3.4,  baseMem: 201 },
@@ -422,7 +423,7 @@ const CST_CX = CST_W / 2;
 const CST_CY = CST_H / 2;
 
 // Colors per category
-// Systems:  #4DFFB4 (accent green)  — Rust, Tauri
+// Systems:  #4DFFB4 (accent green)  — Rust, C, Tauri
 // Web:      #60a5fa (blue)          — TypeScript, React, Next.js
 // Mobile:   #a78bfa (purple)        — Expo
 // Runtime:  #4ade80 (light green)   — Node.js, Python
@@ -431,6 +432,7 @@ const CST_CY = CST_H / 2;
 
 const CST_NODES = [
   { id: "rust",   label: "Rust",       color: "#4DFFB4", theta:   0, phi:  90, primary: true  },
+  { id: "c",      label: "C",          color: "#4DFFB4", theta: -20, phi:  60, primary: false },
   { id: "tauri",  label: "Tauri",      color: "#4DFFB4", theta:  22, phi: 130, primary: false },
   { id: "ts",     label: "TypeScript", color: "#60a5fa", theta:  65, phi:  38, primary: false },
   { id: "react",  label: "React",      color: "#60a5fa", theta: -55, phi:  45, primary: false },
@@ -450,6 +452,8 @@ type NodeId = typeof CST_NODES[number]["id"];
 const CST_EDGES: [NodeId, NodeId][] = [
   ["rust",   "tauri"],
   ["rust",   "sqlite"],
+  ["rust",   "c"],
+  ["c",      "python"],
   ["tauri",  "react"],
   ["tauri",  "ts"],
   ["react",  "ts"],
@@ -1557,33 +1561,34 @@ function ProjectRow({
                 {t("featured")}
               </span>
             )}
-            <span
-              className="flex gap-0.5"
-              aria-label={`${project.stars} out of 5`}
-            >
-              {Array.from({ length: 5 }, (_, i) => (
-                <svg
-                  key={i}
-                  viewBox="0 0 16 16"
-                  className={`w-3 h-3 ${i < project.stars ? "text-accent" : "text-border"}`}
-                >
-                  <path
-                    fill="currentColor"
-                    d="M8 1.3l1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4L2.2 5.5l4-.6z"
-                  />
-                </svg>
-              ))}
-            </span>
           </div>
 
+          <span
+            className="flex gap-1 mt-2"
+            aria-label={`${project.stars} out of 5`}
+          >
+            {Array.from({ length: 5 }, (_, i) => (
+              <svg
+                key={i}
+                viewBox="0 0 16 16"
+                className={`w-4 h-4 ${i < project.stars ? "text-accent drop-shadow-[0_0_4px_var(--color-accent)]" : "text-border"}`}
+              >
+                <path
+                  fill="currentColor"
+                  d="M8 1.3l1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4L2.2 5.5l4-.6z"
+                />
+              </svg>
+            ))}
+          </span>
+
           {(gh || crate) && (
-            <div className="flex items-center gap-3 mt-2">
+            <div className="flex items-center gap-2 mt-3">
               {gh && gh.stars > 0 && (
-                <span className="flex items-center gap-1 text-[10px] tracking-[0.1em] text-fg-muted/50">
+                <span className="flex items-center gap-1.5 text-xs tracking-[0.05em] text-fg border border-accent/40 px-2 py-0.5">
                   <svg
                     viewBox="0 0 16 16"
                     fill="currentColor"
-                    className="w-3 h-3"
+                    className="w-3.5 h-3.5 text-accent"
                   >
                     <path d="M8 1.3l1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4L2.2 5.5l4-.6z" />
                   </svg>
@@ -1592,17 +1597,17 @@ function ProjectRow({
               )}
               {crate && (
                 <>
-                  <span className="flex items-center gap-1 text-[10px] tracking-[0.1em] text-fg-muted/50">
+                  <span className="flex items-center gap-1.5 text-xs tracking-[0.05em] text-fg border border-border px-2 py-0.5">
                     <svg
                       viewBox="0 0 16 16"
                       fill="currentColor"
-                      className="w-3 h-3"
+                      className="w-3.5 h-3.5 text-fg-muted"
                     >
                       <path d="M8 1L1 5v6l7 4 7-4V5L8 1zm0 1.2L13.5 5 8 7.8 2.5 5 8 2.2zM2 5.8l5.5 3v5.4L2 11.2V5.8zm7 8.4V8.8l5-3v5.4l-5 3z" />
                     </svg>
                     <AnimatedNumber value={crate.downloads} duration={1200} />
                   </span>
-                  <span className="text-[10px] tracking-[0.1em] text-fg-muted/50">
+                  <span className="text-xs tracking-[0.05em] text-fg-muted">
                     v{crate.version}
                   </span>
                 </>
@@ -1615,8 +1620,7 @@ function ProjectRow({
           <p className="font-[family-name:var(--font-body)] text-xs md:text-sm text-fg-muted leading-relaxed max-w-[720px]">
             {t(project.descKey)}
           </p>
-          {(project.internal ||
-            ("caseStudy" in project && project.caseStudy)) && (
+          {project.internal && (
             <span className="text-[10px] tracking-[0.15em] uppercase text-accent opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-1.5 inline-block">
               {t("caseStudy")}
             </span>

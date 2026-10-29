@@ -20,14 +20,14 @@ const url = "https://daniilsys.dev";
 export const metadata: Metadata = {
   title: "daniil — systems developer",
   description:
-    "Systems & backend developer. Rust, TypeScript, low-level tooling. Open to freelance.",
+    "Systems & backend developer. Rust, C, TypeScript, low-level tooling. Open to freelance.",
   metadataBase: new URL(url),
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
   openGraph: {
     title: "daniil — systems developer",
     description:
-      "Systems & backend developer. Rust, low-level tooling. Open to freelance.",
+      "Systems & backend developer. Rust, C, low-level tooling. Open to freelance.",
     url,
     siteName: "daniil",
     locale: "en_US",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "daniil — systems developer",
     description:
-      "Systems & backend developer. Rust, low-level tooling. Open to freelance.",
+      "Systems & backend developer. Rust, C, low-level tooling. Open to freelance.",
   },
 };
 
