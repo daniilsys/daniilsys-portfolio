@@ -270,20 +270,6 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   HERO 3D PARALLAX CONTAINER
-   ═══════════════════════════════════════════ */
-
-.hero-perspective {
-  perspective: 1200px;
-  perspective-origin: 50% 50%;
-}
-
-.hero-content-3d {
-  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 0.15s ease-out;
-}
-
-/* ═══════════════════════════════════════════
    HERO GRID BACKGROUND
    ═══════════════════════════════════════════ */
 

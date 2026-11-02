@@ -841,13 +841,11 @@ export default function Home() {
   // Hero cursor glow + 3D parallax
   const heroRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const hero = heroRef.current;
     const glow = glowRef.current;
-    const content = contentRef.current;
     const grid = gridRef.current;
     if (!hero || !glow) return;
 
@@ -864,11 +862,6 @@ export default function Home() {
         glow.style.setProperty("--glow-x", `${x}px`);
         glow.style.setProperty("--glow-y", `${y}px`);
 
-        if (content) {
-          content.style.setProperty("--rx", `${cy * -2}deg`);
-          content.style.setProperty("--ry", `${cx * 3}deg`);
-        }
-
         if (grid) {
           grid.style.setProperty("--grid-x", `${cx * -15}px`);
           grid.style.setProperty("--grid-y", `${cy * -15}px`);
@@ -879,10 +872,6 @@ export default function Home() {
     const handleEnter = () => glow.classList.add("active");
     const handleLeave = () => {
       glow.classList.remove("active");
-      if (content) {
-        content.style.setProperty("--rx", "0deg");
-        content.style.setProperty("--ry", "0deg");
-      }
       if (grid) {
         grid.style.setProperty("--grid-x", "0px");
         grid.style.setProperty("--grid-y", "0px");
@@ -985,7 +974,7 @@ export default function Home() {
           </div>
 
           <div className="hero-perspective w-full relative z-10 pointer-events-none">
-            <div ref={contentRef} className="hero-content-3d">
+            <div>
               <div className="glitch-container" data-text={NAME}>
                 <h1 className="text-[clamp(3.5rem,12vw,9rem)] font-light leading-[0.85] tracking-[-0.05em] text-fg">
                   {NAME.split("").map((char, i) => (
