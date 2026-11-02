@@ -96,7 +96,7 @@ const projects = [
     descKey: "desc.epiplan" as const,
     stack: ["Python", "MCP"],
     link: "https://github.com/daniilsys/epiplan",
-    stars: 4,
+    stars: 3,
     featured: true,
     github: "daniilsys/epiplan",
   },
