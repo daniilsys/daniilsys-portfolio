@@ -1553,21 +1553,22 @@ function ProjectRow({
           </div>
 
           <span
-            className="flex gap-1 mt-2"
-            aria-label={`${project.stars} out of 5`}
+            className="flex items-center gap-2 mt-2.5"
+            title={t("complexity.hint")}
+            role="img"
+            aria-label={`${t("complexity")} ${project.stars}/5 - ${t("complexity.hint")}`}
           >
-            {Array.from({ length: 5 }, (_, i) => (
-              <svg
-                key={i}
-                viewBox="0 0 16 16"
-                className={`w-4 h-4 ${i < project.stars ? "text-accent drop-shadow-[0_0_4px_var(--color-accent)]" : "text-border"}`}
-              >
-                <path
-                  fill="currentColor"
-                  d="M8 1.3l1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4L2.2 5.5l4-.6z"
+            <span className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/60">
+              {t("complexity")}
+            </span>
+            <span className="flex gap-[3px]" aria-hidden="true">
+              {Array.from({ length: 5 }, (_, i) => (
+                <span
+                  key={i}
+                  className={`block w-3 h-[5px] ${i < project.stars ? "bg-accent shadow-[0_0_4px_var(--color-accent)]" : "bg-border"}`}
                 />
-              </svg>
-            ))}
+              ))}
+            </span>
           </span>
 
           {(gh || crate) && (

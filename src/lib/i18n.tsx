@@ -26,6 +26,8 @@ const translations = {
     contactMe: "Get in touch",
     archived: "archived",
     featured: "featured",
+    complexity: "complexity",
+    "complexity.hint": "Technical complexity and time invested",
     "desc.sprava":
       "Cross-platform desktop messaging app. Built a full CI/CD pipeline, native auto-updater, and real-time audio pipeline with noise suppression - from scratch to shipped.",
     "desc.epiplan":
@@ -86,6 +88,8 @@ const translations = {
     contactMe: "Me contacter",
     archived: "archivé",
     featured: "top",
+    complexity: "complexité",
+    "complexity.hint": "Complexité technique et temps investi",
     "desc.sprava":
       "Application de messagerie desktop cross-platform. Pipeline CI/CD complet, système de mise à jour automatique natif, et pipeline audio temps réel avec suppression de bruit - de zéro jusqu'au déploiement.",
     "desc.epiplan":
