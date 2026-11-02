@@ -973,7 +973,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="hero-perspective w-full relative z-10 pointer-events-none">
+          <div className="w-full relative z-10 pointer-events-none">
             <div>
               <div className="glitch-container" data-text={NAME}>
                 <h1 className="text-[clamp(3.5rem,12vw,9rem)] font-light leading-[0.85] tracking-[-0.05em] text-fg">
