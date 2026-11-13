@@ -5,12 +5,9 @@ import { useI18n } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n";
 import { useGitHubStats, useCrateStats } from "@/lib/stats";
 import Link from "next/link";
+import BuildIntro from "@/components/BuildIntro";
 
 const NAME = "daniil";
-const BOOT_DURATION = 1400; // boot overlay visible for this long
-const HERO_START = 800; // hero animations start while boot is fading
-const LETTER_STAGGER = 80;
-const NAME_DONE = HERO_START + NAME.length * LETTER_STAGGER;
 
 const SCRAMBLE_CHARS = "!@#$%&*_+-=[]{}|;:.<>?";
 
@@ -82,13 +79,6 @@ function AnimatedNumber({
 
   return <span ref={ref}>0</span>;
 }
-
-const BOOT_LINES = [
-  { text: "> INIT", delay: 0 },
-  { text: "> LOADING MODULES", delay: 150 },
-  { text: "> SYS.READY", delay: 400 },
-  { text: "> daniil@sys ~", delay: 650 },
-];
 
 const projects = [
   {
@@ -313,28 +303,28 @@ function TelegramShowcase({
       <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_400px] gap-12 lg:gap-20 items-start">
           <div>
-            <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted mb-16">
+            <h2 data-intro="tg-h" className="w-fit text-xs tracking-[0.2em] uppercase text-fg-muted mb-16">
               {t("spotlight")}
             </h2>
 
             <div className="border-t border-border pt-8">
               <div className="flex flex-wrap items-center gap-3 mb-5">
-                <h3 className="text-2xl md:text-3xl font-light tracking-[-0.02em] text-fg">
+                <h3 data-intro="tg-title" className="text-2xl md:text-3xl font-light tracking-[-0.02em] text-fg">
                   Telegram Auto-Shop Bot
                 </h3>
-                <span className="text-[10px] tracking-[0.1em] uppercase text-accent/70 border border-accent/30 px-2 py-0.5">
+                <span data-intro="tg-badge" className="text-[10px] tracking-[0.1em] uppercase text-accent/70 border border-accent/30 px-2 py-0.5">
                   {t("client")}
                 </span>
-                <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/70 border border-border px-2 py-0.5">
+                <span data-intro="tg-badge" className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/70 border border-border px-2 py-0.5">
                   {t("archived")}
                 </span>
               </div>
 
-              <p className="font-[family-name:var(--font-body)] text-sm md:text-base text-fg-muted leading-relaxed max-w-[560px] mb-10">
+              <p data-intro="tg-desc" className="font-[family-name:var(--font-body)] text-sm md:text-base text-fg-muted leading-relaxed max-w-[560px] mb-10">
                 {t("desc.telegram-bot")}
               </p>
 
-              <div className="grid grid-cols-2 gap-6 mb-10 border-t border-border pt-8 max-w-[560px]">
+              <div data-intro="tg-stats" className="grid grid-cols-2 gap-6 mb-10 border-t border-border pt-8 max-w-[560px]">
                 <div>
                   <div className="text-[2rem] font-light text-accent tabular-nums leading-none">
                     <AnimatedNumber value={50} />
@@ -354,7 +344,7 @@ function TelegramShowcase({
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2 mb-10">
+              <div data-intro="tg-chips" className="flex flex-wrap gap-2 mb-10">
                 {["JavaScript", "Telegram Bot API", "CryptAPI"].map((tech) => (
                   <span
                     key={tech}
@@ -365,7 +355,7 @@ function TelegramShowcase({
                 ))}
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div data-intro="tg-cta" className="flex flex-col gap-2 w-fit">
                 <button
                   onClick={onContact}
                   className="cta-glow w-fit text-xs tracking-[0.2em] uppercase text-bg bg-accent px-6 py-3 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
@@ -379,7 +369,7 @@ function TelegramShowcase({
             </div>
           </div>
 
-          <div className="hidden lg:block mt-20">
+          <div data-intro="tg-term" className="hidden lg:block mt-20">
             <TelegramTerminal visible={visible} t={t} />
           </div>
         </div>
@@ -412,7 +402,7 @@ const BASE_PROCS = [
 ────────────────────────────────────────────────────────────────── */
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function HeroMonitor(_: { skipIntro: boolean }) { return null; }
+function HeroMonitor() { return null; }
 
 // ── Option 3: Skill Constellation ─────────────────────────────────
 
@@ -489,7 +479,7 @@ function project3D(theta_deg: number, phi_deg: number, rotY: number) {
   };
 }
 
-function HeroConstellation({ skipIntro }: { skipIntro: boolean }) {
+function HeroConstellation() {
   const nodeEls  = useRef<(HTMLDivElement | null)[]>([]);
   const lineEls  = useRef<(SVGLineElement | null)[]>([]);
   const glowEl   = useRef<HTMLDivElement>(null);
@@ -500,12 +490,9 @@ function HeroConstellation({ skipIntro }: { skipIntro: boolean }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(
-      () => setMounted(true),
-      skipIntro ? 50 : BOOT_DURATION + 600,
-    );
+    const t = setTimeout(() => setMounted(true), 50);
     return () => clearTimeout(t);
-  }, [skipIntro]);
+  }, []);
 
   useEffect(() => {
     if (!mounted) return;
@@ -765,25 +752,24 @@ export default function Home() {
   const projectsRef = useRef<HTMLDivElement>(null);
   const freelanceRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
-  const [skipIntro, setSkipIntro] = useState(false);
-  const [bootDone, setBootDone] = useState(false);
+  const [introRun, setIntroRun] = useState(0); // 0 = no intro playing
   const [contactOpen, setContactOpen] = useState(false);
   const [stackFilter, setStackFilter] = useState<StackFilter>("All");
   const [navVisible, setNavVisible] = useState(false);
-  const d = (ms: number) => (skipIntro ? 0 : ms);
 
+  // layout.tsx flags <html> before paint when the intro should play
   useEffect(() => {
-    const alreadyBooted = sessionStorage.getItem("bootDone") === "1";
-    if (alreadyBooted) {
-      setSkipIntro(true);
-      setBootDone(true);
-    } else {
-      const timer = setTimeout(() => {
-        setBootDone(true);
-        sessionStorage.setItem("bootDone", "1");
-      }, BOOT_DURATION + 400);
-      return () => clearTimeout(timer);
+    if (document.documentElement.classList.contains("intro-running")) {
+      setIntroRun(1);
     }
+  }, []);
+
+  const endIntro = useCallback(() => setIntroRun(0), []);
+
+  const replayIntro = useCallback(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.classList.add("intro-running");
+    setIntroRun((n) => n + 1);
   }, []);
 
   useEffect(() => {
@@ -893,31 +879,8 @@ export default function Home() {
     <div ref={sectionsRef}>
       <div className="grain-overlay" aria-hidden="true" />
 
-      {!bootDone && (
-        <div
-          className="boot-overlay fixed inset-0 z-[100] bg-bg flex flex-col justify-center px-6 md:px-16 lg:px-24"
-          aria-hidden="true"
-        >
-          <div className="max-w-[600px]">
-            {BOOT_LINES.map((line, i) => (
-              <p
-                key={i}
-                className="boot-text text-[10px] md:text-xs tracking-[0.15em] uppercase text-accent/70 mb-2"
-                style={{ animationDelay: `${line.delay}ms` }}
-              >
-                {line.text}
-              </p>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {!skipIntro && (
-        <div
-          className="scanline fixed left-0 w-full h-[2px] bg-accent/30 z-[60] pointer-events-none"
-          style={{ animationDelay: `${HERO_START - 200}ms`, top: "-2px" }}
-          aria-hidden="true"
-        />
+      {introRun > 0 && (
+        <BuildIntro key={introRun} locale={locale} onDone={endIntro} />
       )}
 
       <NavBar
@@ -932,7 +895,6 @@ export default function Home() {
         <LangToggle
           locale={locale}
           toggle={toggle}
-          skipIntro={skipIntro}
           hidden={navVisible}
         />
 
@@ -945,7 +907,6 @@ export default function Home() {
           <div
             ref={gridRef}
             className="hero-grid absolute inset-0 pointer-events-none"
-            style={{ animationDelay: `${d(HERO_START)}ms` }}
             aria-hidden="true"
           />
 
@@ -975,36 +936,29 @@ export default function Home() {
 
           <div className="w-full relative z-10 pointer-events-none">
             <div>
-              <div className="glitch-container" data-text={NAME}>
-                <h1 className="text-[clamp(3.5rem,12vw,9rem)] font-light leading-[0.85] tracking-[-0.05em] text-fg">
-                  {NAME.split("").map((char, i) => (
-                    <span key={i} className="hero-letter">
-                      <span
-                        style={{
-                          animationDelay: `${d(HERO_START + i * LETTER_STAGGER)}ms`,
-                        }}
-                      >
-                        {char}
-                      </span>
-                    </span>
-                  ))}
+              <div
+                className="glitch-container text-[clamp(3.5rem,12vw,9rem)] font-light leading-[0.85] tracking-[-0.05em]"
+                data-text={NAME}
+              >
+                <h1 data-intro="name" className="w-fit text-fg">
+                  {NAME}
                 </h1>
               </div>
 
               <div
-                className="hero-line h-px w-full max-w-[300px] bg-accent/40 mt-6"
-                style={{ animationDelay: `${d(NAME_DONE + 100)}ms` }}
+                data-intro="line"
+                className="h-px w-full max-w-[300px] bg-accent/40 mt-6"
               />
 
-              <div
-                className="hero-fade mt-6 flex items-center gap-3"
-                style={{ animationDelay: `${d(NAME_DONE + 250)}ms` }}
-              >
-                <span className="text-sm md:text-base text-fg-muted tracking-wide uppercase">
+              <div className="mt-6 flex items-center gap-3">
+                <span
+                  data-intro="tagline"
+                  className="text-sm md:text-base text-fg-muted tracking-wide uppercase"
+                >
                   {t("tagline")}
                 </span>
-                <span className="cursor-blink text-accent text-lg">_</span>
-                <span className="flex items-center gap-1.5 ml-2">
+                <span data-intro="caret" className="cursor-blink text-accent text-lg">_</span>
+                <span data-intro="avail" className="flex items-center gap-1.5 ml-2">
                   <span className="available-dot" aria-hidden="true" />
                   <span className="text-[10px] tracking-[0.15em] uppercase text-accent/70">
                     {t("freelance")}
@@ -1013,8 +967,8 @@ export default function Home() {
               </div>
 
               <div
-                className="hero-fade mt-12 flex flex-wrap items-center gap-4 pointer-events-auto w-fit"
-                style={{ animationDelay: `${d(NAME_DONE + 500)}ms` }}
+                data-intro="ctas"
+                className="mt-12 flex flex-wrap items-center gap-4 pointer-events-auto w-fit"
               >
                 <a
                   href="#telegram-bot"
@@ -1030,10 +984,7 @@ export default function Home() {
                 </button>
               </div>
 
-              <div
-                className="hero-fade mt-10 flex items-center gap-2"
-                style={{ animationDelay: `${d(NAME_DONE + 650)}ms` }}
-              >
+              <div data-intro="stats" className="mt-10 flex w-fit items-center gap-2">
                 <span className="text-xs font-light text-accent tabular-nums">50+</span>
                 <span className="text-[10px] tracking-[0.1em] uppercase text-fg-muted/50">{t("telegram.clients")}</span>
                 <span className="text-fg-muted/20" aria-hidden="true">/</span>
@@ -1048,8 +999,8 @@ export default function Home() {
             className="hidden lg:block absolute top-1/2 -translate-y-1/2 right-[calc(34vw-270px)] z-[1] pointer-events-none origin-center lg:scale-[1.1] xl:scale-[1.4] 2xl:scale-[1.75]"
             aria-hidden="true"
           >
-            <div className="pointer-events-auto">
-              <HeroConstellation skipIntro={skipIntro} />
+            <div data-intro="constellation" className="pointer-events-auto">
+              <HeroConstellation />
             </div>
           </div>
 
@@ -1060,15 +1011,20 @@ export default function Home() {
           />
 
           <div className="hidden md:block absolute bottom-8 left-6 md:left-16 lg:left-24">
-            <div
-              className="scroll-line w-px h-16 bg-fg-muted/20"
-              style={{ animationDelay: `${d(NAME_DONE + 700)}ms` }}
-            />
+            <div data-intro="scroll" className="w-px h-16 bg-fg-muted/20" />
           </div>
 
+          <button
+            data-intro="replay"
+            onClick={replayIntro}
+            className="absolute bottom-8 right-6 md:right-16 lg:right-24 z-10 text-[10px] tracking-[0.15em] uppercase text-fg-muted/40 hover:text-accent transition-colors duration-150 cursor-pointer"
+          >
+            {t("replayIntro")}
+          </button>
+
           <div
-            className="hero-fade absolute top-8 left-6 md:left-16 lg:left-24 z-10 text-[10px] tracking-[0.15em] text-fg-muted/30 uppercase"
-            style={{ animationDelay: `${d(NAME_DONE + 400)}ms` }}
+            data-intro="coords"
+            className="absolute top-8 left-6 md:left-16 lg:left-24 z-10 text-[10px] tracking-[0.15em] text-fg-muted/30 uppercase"
           >
             47.7508&deg;N 7.3359&deg;E
           </div>
@@ -1079,14 +1035,14 @@ export default function Home() {
           className="section-reveal section-divider px-6 py-32 md:px-16 lg:px-24"
         >
           <div className="w-full grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
-            <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted">
+            <h2 data-intro="about-h" className="w-fit h-fit text-xs tracking-[0.2em] uppercase text-fg-muted">
               {t("about")}
             </h2>
             <div className="max-w-[600px]">
-              <p className="font-[family-name:var(--font-body)] text-sm md:text-base leading-relaxed text-fg/80">
+              <p data-intro="about-p" className="font-[family-name:var(--font-body)] text-sm md:text-base leading-relaxed text-fg/80">
                 {t("aboutText")}
               </p>
-              <div className="mt-10 border-t border-border pt-4 grid grid-cols-[100px_1fr] gap-4 items-center">
+              <div data-intro="about-edu" className="mt-10 border-t border-border pt-4 grid grid-cols-[100px_1fr] gap-4 items-center">
                 <span className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/50">
                   {t("education")}
                 </span>
@@ -1097,7 +1053,7 @@ export default function Home() {
                   </span>
                 </div>
               </div>
-              <p className="mt-6 text-xs tracking-[0.15em] uppercase text-accent">
+              <p data-intro="about-free" className="w-fit mt-6 text-xs tracking-[0.15em] uppercase text-accent">
                 {t("freelance")}
               </p>
             </div>
@@ -1111,7 +1067,7 @@ export default function Home() {
           ref={freelanceRef}
         >
           <div className="w-full">
-            <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted block mb-16">
+            <h2 data-intro="fw-h" className="w-fit text-xs tracking-[0.2em] uppercase text-fg-muted block mb-16">
               {t("freelanceWork")}
             </h2>
 
@@ -1119,6 +1075,7 @@ export default function Home() {
               {freelanceWork.map((entry, i) => (
                 <div
                   key={entry.name}
+                  data-intro="fw-row"
                   data-project-row
                   data-index={i}
                   className="group border-b border-border py-6 md:py-8 opacity-0 translate-x-[-12px] transition-none [&.animate-in]:opacity-100 [&.animate-in]:translate-x-0 [&.animate-in]:transition-all [&.animate-in]:duration-400 [&.animate-in]:ease-out"
@@ -1161,10 +1118,11 @@ export default function Home() {
         >
           <div className="w-full">
             <div className="flex flex-wrap items-center justify-between gap-4 mb-16">
-              <h2 className="text-xs tracking-[0.2em] uppercase text-fg-muted">
+              <h2 data-intro="pj-h" className="text-xs tracking-[0.2em] uppercase text-fg-muted">
                 {t("projects")}
               </h2>
               <div
+                data-intro="pj-filters"
                 className="flex flex-wrap gap-2"
                 role="group"
                 aria-label="Filter by stack"
@@ -1197,6 +1155,7 @@ export default function Home() {
                 return (
                   <div
                     key={project.name}
+                    data-intro="project"
                     className={`transition-all duration-200 ease-out ${
                       matches
                         ? "opacity-100 scale-100"
@@ -1212,19 +1171,20 @@ export default function Home() {
         </section>
 
         <section className="section-reveal px-6 py-24 md:px-16 lg:px-24 border-t border-border flex flex-col items-center text-center gap-6">
-          <p className="text-sm text-fg-muted">{t("freelance")}</p>
+          <p data-intro="cta-p" className="text-sm text-fg-muted">{t("freelance")}</p>
           <button
+            data-intro="cta-btn"
             onClick={() => setContactOpen(true)}
             className="text-xs tracking-[0.2em] uppercase text-bg bg-accent px-8 py-4 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
           >
             {t("contactMe")}
           </button>
-          <p className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/40">
+          <p data-intro="cta-small" className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/40">
             {t("responseTime")}
           </p>
         </section>
 
-        <footer className="px-6 py-8 md:px-16 lg:px-24 border-t border-border flex items-center justify-between">
+        <footer data-intro="footer" className="px-6 py-8 md:px-16 lg:px-24 border-t border-border flex items-center justify-between">
           <p className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/40">
             daniil &mdash; 2026
           </p>
@@ -1499,19 +1459,17 @@ function ContactModal({
 function LangToggle({
   locale,
   toggle,
-  skipIntro,
   hidden,
 }: {
   locale: Locale;
   toggle: () => void;
-  skipIntro: boolean;
   hidden?: boolean;
 }) {
   return (
     <button
+      data-intro="lang"
       onClick={toggle}
-      className={`${skipIntro ? "" : "hero-fade "}fixed top-8 right-6 md:right-16 lg:right-24 z-40 text-xs tracking-[0.15em] uppercase border border-border px-3 py-1.5 text-fg-muted hover:text-accent hover:border-accent transition-colors duration-150 cursor-pointer ${hidden ? "hidden" : ""}`}
-      style={skipIntro ? undefined : { animationDelay: `${NAME_DONE + 400}ms` }}
+      className={`fixed top-8 right-6 md:right-16 lg:right-24 z-40 text-xs tracking-[0.15em] uppercase border border-border px-3 py-1.5 text-fg-muted hover:text-accent hover:border-accent transition-colors duration-150 cursor-pointer ${hidden ? "hidden" : ""}`}
       aria-label="Toggle language"
     >
       {locale === "en" ? "FR" : "EN"}

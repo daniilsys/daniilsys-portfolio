@@ -47,9 +47,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistMono.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${geistMono.variable} ${inter.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <meta name="theme-color" content="#0a0a0a" />
+        {/* Home only, once per session: decide before first paint whether the build intro plays.
+            ?intro=0 disables it, ?intro=1 forces it. Failsafe if the app never mounts. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var q=location.search,d=document.documentElement;if(location.pathname==="/"&&q.indexOf("intro=0")<0&&(q.indexOf("intro=1")>=0||(!navigator.webdriver&&sessionStorage.getItem("introSeen")!=="1"))&&!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("intro-running");setTimeout(function(){if(!window.__introStarted)d.classList.remove("intro-running")},5000)}}catch(e){}`,
+          }}
+        />
       </head>
       <body className="font-[family-name:var(--font-mono)] bg-bg text-fg">
         <a

@@ -55,51 +55,6 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   BOOT SEQUENCE INTRO
-   ═══════════════════════════════════════════ */
-
-@keyframes bootWipe {
-  0%, 85% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-}
-
-.boot-overlay {
-  will-change: transform, opacity;
-  animation: bootWipe 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes bootTextFlicker {
-  0% { opacity: 0; }
-  5% { opacity: 1; }
-  10% { opacity: 0.3; }
-  15% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-.boot-text {
-  animation: bootTextFlicker 1.4s steps(1) forwards;
-}
-
-/* Scanline sweep */
-@keyframes scanlineSweep {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(100vh); opacity: 0.3; }
-}
-
-.scanline {
-  top: -2px;
-  will-change: transform;
-  animation: scanlineSweep 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-/* ═══════════════════════════════════════════
    HERO NAME GLITCH (transform-only)
    ═══════════════════════════════════════════ */
 
@@ -122,11 +77,17 @@ body {
 
 .glitch-container::before {
   color: #ff0040;
+}
+
+html:not(.intro-running) .glitch-container::before {
   animation: glitchLayer1 0.3s steps(2) 0.9s 2, glitchFadeOut 0.1s 1.5s forwards;
 }
 
 .glitch-container::after {
   color: #0ff;
+}
+
+html:not(.intro-running) .glitch-container::after {
   animation: glitchLayer2 0.3s steps(2) 0.9s 2, glitchFadeOut 0.1s 1.5s forwards;
 }
 
@@ -150,58 +111,7 @@ body {
   to { opacity: 0; }
 }
 
-/* ═══════════════════════════════════════════
-   HERO ENTRANCE ANIMATIONS
-   ═══════════════════════════════════════════ */
-
-@keyframes letterReveal {
-  from {
-    transform: translateY(110%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.hero-letter {
-  display: inline-block;
-  overflow: hidden;
-}
-
-.hero-letter span {
-  display: inline-block;
-  transform: translateY(110%);
-  opacity: 0;
-  will-change: transform, opacity;
-  animation: letterReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Accent line with flash */
-@keyframes lineDrawFlash {
-  0% {
-    transform: scaleX(0);
-    box-shadow: none;
-  }
-  60% {
-    transform: scaleX(1);
-    box-shadow: 0 0 20px var(--color-accent), 0 0 40px var(--color-accent);
-  }
-  100% {
-    transform: scaleX(1);
-    box-shadow: none;
-  }
-}
-
-.hero-line {
-  transform: scaleX(0);
-  transform-origin: left;
-  will-change: transform;
-  animation: lineDrawFlash 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Fade-slide up */
+/* Fade-slide up (modal, telegram demo) */
 @keyframes fadeSlideUp {
   from {
     opacity: 0;
@@ -211,25 +121,6 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.hero-fade {
-  opacity: 0;
-  transform: translateY(16px);
-  will-change: transform, opacity;
-  animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Scroll indicator */
-@keyframes growDown {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
-}
-
-.scroll-line {
-  transform: scaleY(0);
-  transform-origin: top;
-  animation: growDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Cursor blink */
@@ -750,4 +641,359 @@ a:hover [data-project-row],
   text-transform: uppercase;
   white-space: nowrap;
   letter-spacing: 0.1em;
+}
+/* ═══════════════════════════════════════════
+   BUILD INTRO (multiplayer cursors, see BuildIntro.tsx)
+   ═══════════════════════════════════════════ */
+
+html.intro-running {
+  overflow: hidden;
+}
+
+html.intro-running [data-intro]:not([data-intro-shown]) {
+  opacity: 0;
+}
+
+.intro-root {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.intro-chrome {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.5s ease;
+}
+
+.intro-root.leaving .intro-chrome {
+  opacity: 0;
+}
+
+.intro-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(229, 229, 229, 0.14) 1px, transparent 1.3px);
+  background-size: 16px 16px;
+  clip-path: circle(0px at 0 0);
+}
+
+.intro-fixed {
+  position: absolute;
+  inset: 0;
+}
+
+/* Scrolls with the page (translated by -scrollY every frame) */
+.intro-doc {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  will-change: transform;
+}
+
+/* Sections normally reveal on scroll; during the intro the cursors do it */
+html.intro-running .section-reveal,
+html.intro-running .section-reveal.visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  animation: none;
+}
+
+html.intro-running #telegram-bot {
+  opacity: 1;
+  translate: none;
+}
+
+html.intro-running [data-project-row] {
+  opacity: 1;
+  translate: none;
+}
+
+/* Rulers */
+.intro-ruler {
+  position: absolute;
+  background-color: rgba(10, 10, 10, 0.94);
+  color: #5c5c5c;
+  font-size: 9px;
+  line-height: 1;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.intro-ruler span {
+  position: absolute;
+}
+
+.intro-ruler i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.9;
+}
+
+.intro-ruler-x {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  border-bottom: 1px solid #1f1f1f;
+  background-image:
+    linear-gradient(90deg, #3a3a3a 1px, transparent 1px),
+    linear-gradient(90deg, #262626 1px, transparent 1px);
+  background-size: 50px 8px, 10px 4px;
+  background-position: 0 100%, 0 100%;
+  background-repeat: repeat-x;
+  animation: introRulerX 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.intro-ruler-x span {
+  top: 3px;
+}
+
+.intro-ruler-x i {
+  width: 1px;
+  height: 20px;
+}
+
+.intro-ruler-y {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 20px;
+  border-right: 1px solid #1f1f1f;
+  background-image:
+    linear-gradient(180deg, #3a3a3a 1px, transparent 1px),
+    linear-gradient(180deg, #262626 1px, transparent 1px);
+  background-size: 8px 50px, 4px 10px;
+  background-position: 100% 0, 100% 0;
+  background-repeat: repeat-y;
+  animation: introRulerY 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.intro-ruler-y span {
+  left: 3px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.intro-ruler-y i {
+  width: 20px;
+  height: 1px;
+}
+
+.intro-ruler-corner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background: #0a0a0a;
+  border-right: 1px solid #1f1f1f;
+  border-bottom: 1px solid #1f1f1f;
+  z-index: 3;
+}
+
+@keyframes introRulerX {
+  from { transform: translateY(-100%); }
+  to { transform: none; }
+}
+
+@keyframes introRulerY {
+  from { transform: translateX(-100%); }
+  to { transform: none; }
+}
+
+/* Layout guides */
+.intro-guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 77, 141, 0.5);
+}
+
+/* Selection boxes */
+.intro-sel {
+  position: absolute;
+  border: 1px solid var(--c);
+  pointer-events: none;
+}
+
+.intro-sel.warn {
+  border-style: dashed;
+  background: color-mix(in srgb, var(--c) 6%, transparent);
+}
+
+.intro-sel i {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #0a0a0a;
+  border: 1px solid var(--c);
+}
+
+.intro-sel i:nth-child(1) { left: -4px; top: -4px; }
+.intro-sel i:nth-child(2) { right: -4px; top: -4px; }
+.intro-sel i:nth-child(3) { left: -4px; bottom: -4px; }
+.intro-sel i:nth-child(4) { right: -4px; bottom: -4px; }
+
+.intro-sel span {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 7px);
+  transform: translateX(-50%);
+  background: var(--c);
+  color: #0a0a0a;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+
+/* Cursors */
+.intro-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.intro-cursor svg {
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+.intro-cursor .arrow {
+  margin: -1px 0 0 -1px;
+}
+
+.intro-cursor .ibeam {
+  display: none;
+  position: absolute;
+  left: -6px;
+  top: -11px;
+}
+
+.intro-cursor.text .arrow { display: none; }
+.intro-cursor.text .ibeam { display: block; }
+
+.intro-tag {
+  position: absolute;
+  left: 14px;
+  top: 18px;
+  background: var(--c);
+  color: #0a0a0a;
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 3px 7px;
+  border-radius: 2px;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.intro-tag b {
+  display: block;
+  font-weight: 600;
+}
+
+.intro-tag .msg {
+  display: none;
+  white-space: normal;
+  width: max-content;
+  max-width: min(340px, 68vw);
+}
+
+.intro-cursor.saying .msg {
+  display: block;
+  animation: introMsg 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes introMsg {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: none; }
+}
+
+.intro-cursor.text .intro-tag {
+  top: 14px;
+}
+
+/* HUD */
+/* Full-width row centred with flex: the entrance animation owns `transform`,
+   so a translateX(-50%) centring would be overwritten. */
+.intro-hud {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  padding: 0 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  font-size: 11px;
+  z-index: 4;
+  animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.intro-hud > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  background: #141414;
+  border: 1px solid #262626;
+  color: #a3a3a3;
+  padding: 6px 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.intro-hud kbd {
+  font-family: inherit;
+  font-size: 10px;
+  color: #e5e5e5;
+  border: 1px solid #333;
+  padding: 0 4px;
+}
+
+.intro-hud .intro-hud-deploy {
+  display: none;
+}
+
+.intro-hud .intro-hud-deploy.on {
+  display: flex;
+  color: #e5e5e5;
+}
+
+.intro-hud-deploy b {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f5c542;
+  animation: availablePulse 0.8s ease-in-out infinite;
+}
+
+.intro-hud-deploy.ok b {
+  background: var(--color-accent);
+  animation: none;
+}
+
+.intro-hud-mobile { display: none !important; }
+
+@media (max-width: 767px) {
+  .intro-ruler,
+  .intro-ruler-corner { display: none; }
+  .intro-hud-desktop,
+  .intro-hud > span:first-child { display: none !important; }
+  .intro-hud { bottom: 14px; }
+  .intro-hud-mobile { display: flex !important; }
+  .intro-tag { font-size: 10px; }
 }

@@ -14,6 +14,7 @@ const translations = {
   en: {
     tagline: "I build fast software that doesn't break.",
     cta: "See my work",
+    replayIntro: "↻ replay intro",
     about: "About",
     aboutText:
       "Systems and backend developer, Epitech student. I build with Rust and C, ship real tools, and tackle whatever layer the problem needs - from low-level internals to production interfaces.",
@@ -76,6 +77,7 @@ const translations = {
   fr: {
     tagline: "Je fais du logiciel rapide et fiable.",
     cta: "Voir mes projets",
+    replayIntro: "↻ rejouer l'intro",
     about: "À propos",
     aboutText:
       "Développeur systèmes et backend, étudiant à Epitech. Je travaille en Rust et en C, je livre de vrais outils, et je construis la solution que le problème demande - du bas niveau jusqu'aux interfaces en production.",
