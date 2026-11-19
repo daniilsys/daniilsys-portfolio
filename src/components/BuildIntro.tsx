@@ -80,6 +80,12 @@ const LINES = {
   },
 } satisfies Record<Locale, Record<string, string | string[]>>;
 
+const WINNER_KF: Keyframe[] = [
+  { opacity: 0, transform: "translateY(-14px) scale(0.8)", filter: "brightness(2.5)" },
+  { opacity: 1, transform: "translateY(0) scale(1.08)", filter: "brightness(1.6)", offset: 0.6 },
+  { opacity: 1, transform: "none", filter: "none" },
+];
+
 const EASE_OUT = "cubic-bezier(0.16, 1, 0.3, 1)";
 const EASE_IN_OUT = "cubic-bezier(0.65, 0, 0.35, 1)";
 
@@ -793,6 +799,14 @@ export default function BuildIntro({
         sessionStorage.setItem(INTRO_SEEN_KEY, "1");
       } catch {}
       if (skipped) {
+        // skipping still ends at the top, with the winner badge landing
+        window.scrollTo(0, 0);
+        document.querySelector<HTMLElement>('[data-intro="winner"]')?.animate(WINNER_KF, {
+          duration: 800,
+          delay: 350,
+          easing: EASE_OUT,
+          fill: "backwards",
+        });
         root.classList.add("leaving");
         window.setTimeout(() => onDoneRef.current(), 350);
       } else {
@@ -821,11 +835,7 @@ export default function BuildIntro({
         const wb = box("winner");
         if (wb) {
           await move("daniil", Math.min(wb.right + 24, W - 40), wb.top + wb.height / 2, 600);
-          reveal("winner", [
-            { opacity: 0, transform: "translateY(-14px) scale(0.8)", filter: "brightness(2.5)" },
-            { opacity: 1, transform: "translateY(0) scale(1.08)", filter: "brightness(1.6)", offset: 0.6 },
-            { opacity: 1, transform: "none", filter: "none" },
-          ], 800);
+          reveal("winner", WINNER_KF, 800);
           say("daniil", "GG", 1400);
           await wait(1500);
         }

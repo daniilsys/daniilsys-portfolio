@@ -938,9 +938,9 @@ export default function Home() {
             <div>
               <div
                 data-intro="winner"
-                className="winner-badge mb-5 flex w-fit max-w-full flex-col items-stretch gap-1.5 sm:flex-row sm:items-center sm:gap-2 border border-accent/60 bg-accent/10 px-3 py-1.5 text-[10px] sm:text-[11px] md:text-xs font-medium tracking-[0.15em] sm:tracking-[0.2em] uppercase text-accent"
+                className="winner-badge mb-5 flex w-fit max-w-full flex-col items-stretch sm:flex-row border border-accent/60 bg-accent/10 text-[10px] sm:text-[11px] md:text-xs font-medium tracking-[0.15em] sm:tracking-[0.2em] uppercase text-accent"
               >
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-2 px-3 py-1.5">
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 24 24"
@@ -970,7 +970,7 @@ export default function Home() {
                   </a>
                 </span>
                 </span>
-                <span className="prize-wow -mx-3 -mb-1.5 justify-center py-1.5 sm:mx-0 sm:-my-1.5 sm:-mr-3 sm:ml-1 sm:mb-0 sm:justify-start sm:py-0 self-stretch flex items-center px-3 text-xs sm:text-sm md:text-base font-semibold tracking-[0.1em] sm:tracking-[0.12em] text-bg">
+                <span className="prize-wow flex items-center justify-center px-3 py-1.5 text-xs sm:text-sm md:text-base font-semibold tracking-[0.1em] sm:tracking-[0.12em] text-bg">
                   <span className="relative z-10">{t("winnerPrize")}</span>
                 </span>
               </div>

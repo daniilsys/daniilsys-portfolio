@@ -1025,8 +1025,8 @@ html.intro-running [data-project-row] {
 .prize-wow {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(100deg, #4dffb4, #b9ffe0 35%, #4dffb4 55%, #2ee89a);
-  background-size: 220% 100%;
+  background: linear-gradient(100deg, #4dffb4, #b9ffe0 25%, #4dffb4 50%, #b9ffe0 75%, #4dffb4);
+  background-size: 200% 100%;
   animation: prizeFlow 3s linear infinite, prizePulse 2s ease-in-out infinite;
 }
 .prize-wow::before {
@@ -1038,7 +1038,7 @@ html.intro-running [data-project-row] {
   animation: prizeSweep 2.4s ease-in-out infinite;
 }
 @keyframes prizeFlow {
-  to { background-position: -220% 0; }
+  to { background-position: -200% 0; }
 }
 @keyframes prizePulse {
   0%, 100% { box-shadow: 0 0 10px 0 rgba(77, 255, 180, 0.5); }
