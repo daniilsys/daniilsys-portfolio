@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n";
+import { track as trackEvent } from "@/lib/analytics";
 
 /*
  * "Live build" intro: four multiplayer cursors build the whole home page in
@@ -789,6 +790,7 @@ export default function BuildIntro({
     const finalize = (skipped: boolean) => {
       if (finished) return;
       finished = true;
+      trackEvent(skipped ? "intro_skipped" : "intro_completed");
       ac.abort();
       cancelAnimationFrame(raf);
       timers.forEach((id) => window.clearTimeout(id));

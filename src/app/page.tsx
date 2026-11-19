@@ -6,6 +6,7 @@ import type { Locale } from "@/lib/i18n";
 import { useGitHubStats, useCrateStats } from "@/lib/stats";
 import Link from "next/link";
 import BuildIntro from "@/components/BuildIntro";
+import { track, trackScroll } from "@/lib/analytics";
 
 const NAME = "daniil";
 
@@ -764,9 +765,17 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => trackScroll(), []);
+
   const endIntro = useCallback(() => setIntroRun(0), []);
 
+  const openContact = useCallback(() => {
+    track("contact_opened");
+    setContactOpen(true);
+  }, []);
+
   const replayIntro = useCallback(() => {
+    track("intro_replayed");
     window.scrollTo(0, 0);
     document.documentElement.classList.add("intro-running");
     setIntroRun((n) => n + 1);
@@ -884,7 +893,7 @@ export default function Home() {
       )}
 
       <NavBar
-        onContact={() => setContactOpen(true)}
+        onContact={() => openContact()}
         t={t}
         locale={locale}
         toggle={toggle}
@@ -962,6 +971,7 @@ export default function Home() {
                   {t("winner")} ·{" "}
                   <a
                     href="https://www.rhinetech-ctf.eu/"
+                    onClick={() => track("winner_badge_click")}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="underline decoration-accent/40 underline-offset-4 hover:decoration-accent transition-colors duration-150"
@@ -1015,7 +1025,7 @@ export default function Home() {
                   {t("cta")}
                 </a>
                 <button
-                  onClick={() => setContactOpen(true)}
+                  onClick={() => openContact()}
                   className="cta-glow inline-block text-xs tracking-[0.2em] uppercase text-bg bg-accent px-6 py-3 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
                 >
                   {t("contactMe")}
@@ -1098,9 +1108,10 @@ export default function Home() {
           </div>
         </section>
 
-        <TelegramShowcase t={t} onContact={() => setContactOpen(true)} />
+        <TelegramShowcase t={t} onContact={() => openContact()} />
 
         <section
+          data-section="freelance"
           className="section-reveal px-6 pt-32 pb-16 md:px-16 lg:px-24"
           ref={freelanceRef}
         >
@@ -1168,7 +1179,10 @@ export default function Home() {
                 {ALL_STACKS.map((s) => (
                   <button
                     key={s}
-                    onClick={() => setStackFilter(s)}
+                    onClick={() => {
+                      track("stack_filter", { stack: s });
+                      setStackFilter(s);
+                    }}
                     className={`text-[10px] tracking-[0.12em] uppercase px-3 py-1.5 border transition-colors duration-150 cursor-pointer ${
                       stackFilter === s
                         ? "border-accent text-accent"
@@ -1208,11 +1222,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section-reveal px-6 py-24 md:px-16 lg:px-24 border-t border-border flex flex-col items-center text-center gap-6">
+        <section data-section="contact" className="section-reveal px-6 py-24 md:px-16 lg:px-24 border-t border-border flex flex-col items-center text-center gap-6">
           <p data-intro="cta-p" className="text-sm text-fg-muted">{t("freelance")}</p>
           <button
             data-intro="cta-btn"
-            onClick={() => setContactOpen(true)}
+            onClick={() => openContact()}
             className="text-xs tracking-[0.2em] uppercase text-bg bg-accent px-8 py-4 hover:bg-accent/80 transition-colors duration-150 cursor-pointer"
           >
             {t("contactMe")}
@@ -1228,7 +1242,7 @@ export default function Home() {
           </p>
           <div className="flex items-center gap-6">
             <button
-              onClick={() => setContactOpen(true)}
+              onClick={() => openContact()}
               className="text-[10px] tracking-[0.15em] uppercase text-fg-muted/40 hover:text-accent transition-colors duration-150 cursor-pointer"
             >
               {t("contactMe")}
@@ -1373,6 +1387,7 @@ function ContactModal({
       });
       if (res.ok) {
         setFormStatus("sent");
+        track("contact_form_sent");
         form.reset();
       } else {
         setFormStatus("error");
@@ -1630,7 +1645,11 @@ function ProjectRow({
   if (project.link) {
     if (project.internal) {
       return (
-        <Link href={project.link} className="block">
+        <Link
+          href={project.link}
+          className="block"
+          onClick={() => track("project_opened", { project: project.name })}
+        >
           {inner}
         </Link>
       );
@@ -1641,6 +1660,7 @@ function ProjectRow({
         target="_blank"
         rel="noopener noreferrer"
         className="block"
+        onClick={() => track("project_opened", { project: project.name })}
       >
         {inner}
       </a>
