@@ -12,6 +12,5 @@ if (key && process.env.NODE_ENV === "production") {
     persistence: "memory",
     person_profiles: "identified_only",
     disable_session_recording: true,
-    respect_dnt: true,
   });
 }
