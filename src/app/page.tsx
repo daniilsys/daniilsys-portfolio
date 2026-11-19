@@ -937,6 +937,44 @@ export default function Home() {
           <div className="w-full relative z-10 pointer-events-none">
             <div>
               <div
+                data-intro="winner"
+                className="winner-badge mb-5 flex w-fit max-w-full flex-col items-stretch gap-1.5 sm:flex-row sm:items-center sm:gap-2 border border-accent/60 bg-accent/10 px-3 py-1.5 text-[10px] sm:text-[11px] md:text-xs font-medium tracking-[0.15em] sm:tracking-[0.2em] uppercase text-accent"
+              >
+                <span className="flex items-center gap-2">
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M8 4h8v6a4 4 0 0 1-8 0V4Z" />
+                  <path d="M8 6H5v1.5A3 3 0 0 0 8 10.5" />
+                  <path d="M16 6h3v1.5a3 3 0 0 1-3 3" />
+                  <path d="M12 14v3" />
+                  <path d="M8.5 20h7" />
+                  <path d="M10 17h4v3h-4z" />
+                </svg>
+                <span>
+                  {t("winner")} ·{" "}
+                  <a
+                    href="https://www.rhinetech-ctf.eu/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-accent/40 underline-offset-4 hover:decoration-accent transition-colors duration-150"
+                  >
+                    RhineTech CTF
+                  </a>
+                </span>
+                </span>
+                <span className="prize-wow -mx-3 -mb-1.5 justify-center py-1.5 sm:mx-0 sm:-my-1.5 sm:-mr-3 sm:ml-1 sm:mb-0 sm:justify-start sm:py-0 self-stretch flex items-center px-3 text-xs sm:text-sm md:text-base font-semibold tracking-[0.1em] sm:tracking-[0.12em] text-bg">
+                  <span className="relative z-10">{t("winnerPrize")}</span>
+                </span>
+              </div>
+              <div
                 className="glitch-container text-[clamp(3.5rem,12vw,9rem)] font-light leading-[0.85] tracking-[-0.05em]"
                 data-text={NAME}
               >

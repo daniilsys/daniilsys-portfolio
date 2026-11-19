@@ -817,6 +817,18 @@ export default function BuildIntro({
           move("valgrind", W + 60, H * 0.15, 900),
           move("intern", -60, H + 60, 900),
         ]);
+        // last beat: the winner badge lands above the name
+        const wb = box("winner");
+        if (wb) {
+          await move("daniil", Math.min(wb.right + 24, W - 40), wb.top + wb.height / 2, 600);
+          reveal("winner", [
+            { opacity: 0, transform: "translateY(-14px) scale(0.8)", filter: "brightness(2.5)" },
+            { opacity: 1, transform: "translateY(0) scale(1.08)", filter: "brightness(1.6)", offset: 0.6 },
+            { opacity: 1, transform: "none", filter: "none" },
+          ], 800);
+          say("daniil", "GG", 1400);
+          await wait(1500);
+        }
         finalize(false);
       } catch (e) {
         if (!(e instanceof Aborted)) throw e;

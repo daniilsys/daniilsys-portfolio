@@ -12,6 +12,8 @@ export type Locale = "en" | "fr";
 
 const translations = {
   en: {
+    winner: "Winner",
+    winnerPrize: "€1500 cash prize",
     tagline: "I build fast software that doesn't break.",
     cta: "See my work",
     replayIntro: "↻ replay intro",
@@ -75,6 +77,8 @@ const translations = {
     caseStudy: "Case study →",
   },
   fr: {
+    winner: "Vainqueur",
+    winnerPrize: "1500 € de cashprize",
     tagline: "Je fais du logiciel rapide et fiable.",
     cta: "Voir mes projets",
     replayIntro: "↻ rejouer l'intro",
