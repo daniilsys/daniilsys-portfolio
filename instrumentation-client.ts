@@ -7,7 +7,7 @@ const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 if (key && process.env.NODE_ENV === "production") {
   posthog.init(key, {
     api_host: "/ingest",
-    ui_host: "https://eu.posthog.com",
+    ui_host: "https://us.posthog.com",
     defaults: "2025-05-24",
     persistence: "memory",
     person_profiles: "identified_only",
